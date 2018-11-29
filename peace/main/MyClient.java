@@ -1,6 +1,6 @@
-//é€²æ—ã€€ãƒ‘ã‚¹ãŠã‚ˆã³ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®å®Ÿè£… ã‚³ãƒã‚«ã‚¦ãƒ³ãƒˆå®Ÿè£…(11/8)
-// ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³ã®å®Ÿè£…ã€€åˆæœŸåŒ–ã®é–¢æ•°åŒ–(11/15)
-//getIconã§èª­ã‚“ã§ã²ã‹ãã™ã‚Œã°ãŠï½‹
+//i’»@ƒpƒX‚¨‚æ‚Ñƒ^[ƒ“ƒJƒEƒ“ƒg‚ÌÀ‘• ƒRƒ}ƒJƒEƒ“ƒgÀ‘•(11/8)
+// ƒŠƒZƒbƒgƒ{ƒ^ƒ“‚ÌÀ‘•@‰Šú‰»‚ÌŠÖ”‰»(11/15)
+//getIcon‚Å“Ç‚ñ‚Å‚Ğ‚©‚­‚·‚ê‚Î‚¨‚‹
 
 import java.net.*;
 import java.io.*;
@@ -10,70 +10,70 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
-//è¿½åŠ 
+//’Ç‰Á
 
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
-	private JButton buttonArray[][];//ãƒœã‚¿ãƒ³ç”¨ã®é…åˆ—
+	private JButton buttonArray[][];//ƒ{ƒ^ƒ“—p‚Ì”z—ñ
 	private Container c;
 	private ImageIcon blackIcon, whiteIcon, boardIcon, passIcon,resetIcon;
 	private int myColor;
-	private int myTurn = 3; //myTurn==3ã®ã¨ãåˆæœŸã‚¿ãƒ¼ãƒ³ã¨ã™ã‚‹ã€‚myTurn==0ã¯é»’ã€1ã¯ç™½ã€‚
+	private int myTurn = 3; //myTurn==3‚Ì‚Æ‚«‰Šúƒ^[ƒ“‚Æ‚·‚éBmyTurn==0‚Í•A1‚Í”’B
 	private ImageIcon myIcon, yourIcon;
 	private int flipNum = 0;
 	private int TurnCount = 0;
-	PrintWriter out;//å‡ºåŠ›ç”¨ã®ãƒ©ã‚¤ã‚¿ãƒ¼
+	PrintWriter out;//o—Í—p‚Ìƒ‰ƒCƒ^[
 	JLabel turnLabel = new JLabel(" ");
 	JLabel tCountLabel = new JLabel("Turn 0");
-	JLabel myIconCLabel = new JLabel("Ã—" + "2");
-	JLabel yourIconCLabel = new JLabel("Ã—" + "2");
-	JLabel subLabel = new JLabel("ç›¸æ‰‹ã¨ã®å·®ã¯" + 0 + "ã§ã™");
-	JTextArea area = new JTextArea("åˆæœŸãƒ†ã‚­ã‚¹ãƒˆ");
+	JLabel myIconCLabel = new JLabel("~" + "2");
+	JLabel yourIconCLabel = new JLabel("~" + "2");
+	JLabel subLabel = new JLabel("‘Šè‚Æ‚Ì·‚Í" + 0 + "‚Å‚·");
+	JTextArea area = new JTextArea("‰ŠúƒeƒLƒXƒg");
 	JLabel agentLabel = new JLabel(" ");
 	private JButton passButton;
 	private JButton resetButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub;
 
-	//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã®ã‚¢ã‚¤ã‚³ãƒ³
+	//ƒ|ƒCƒ“ƒ^[‚ÌƒAƒCƒRƒ“
 	ImageIcon pointerIcon = new ImageIcon("images/pointer.png");
 	JLabel pointerLabel = new JLabel(pointerIcon);
 
-	//ã‚¿ãƒ¼ãƒ³ã‚’ç¤ºã™ã‚¢ã‚¤ã‚³ãƒ³
+	//ƒ^[ƒ“‚ğ¦‚·ƒAƒCƒRƒ“
 	ImageIcon myturnIcon = new ImageIcon("images/myturn.png");
 	ImageIcon yourturnIcon = new ImageIcon("images/yourturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
 
 	public MyClient() {
-		//åå‰ã®å…¥åŠ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ã
-		String myName = JOptionPane.showInputDialog(null,"åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„","åå‰ã®å…¥åŠ›",JOptionPane.QUESTION_MESSAGE);
+		//–¼‘O‚Ì“ü—Íƒ_ƒCƒAƒƒO‚ğŠJ‚­
+		String myName = JOptionPane.showInputDialog(null,"–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢","–¼‘O‚Ì“ü—Í",JOptionPane.QUESTION_MESSAGE);
 		if(myName.equals("")){
-			myName = "No name";//åå‰ãŒãªã„ã¨ãã¯ï¼Œ"No name"ã¨ã™ã‚‹
+			myName = "No name";//–¼‘O‚ª‚È‚¢‚Æ‚«‚ÍC"No name"‚Æ‚·‚é
 		}
 
-		//IPã‚¢ãƒ‰ãƒ¬ã‚¹ã®å…¥åŠ›
-		String myIp = JOptionPane.showInputDialog(null,"IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„","IPã‚¢ãƒ‰ãƒ¬ã‚¹ã®å…¥åŠ›",JOptionPane.QUESTION_MESSAGE);
+		//IPƒAƒhƒŒƒX‚Ì“ü—Í
+		String myIp = JOptionPane.showInputDialog(null,"IPƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢","IPƒAƒhƒŒƒX‚Ì“ü—Í",JOptionPane.QUESTION_MESSAGE);
 		if(myIp.equals("")){
-			myIp = "localhost";//ãªã„ã¨ãã¯ï¼Œlocalhostã¨ã™ã‚‹
+			myIp = "localhost";//‚È‚¢‚Æ‚«‚ÍClocalhost‚Æ‚·‚é
 		}
 
 		setUp();
 
-		//ã‚µãƒ¼ãƒã«æ¥ç¶šã™ã‚‹
+		//ƒT[ƒo‚ÉÚ‘±‚·‚é
 		Socket socket = null;
 		try {
-			//"localhost"ã¯ï¼Œè‡ªåˆ†å†…éƒ¨ã¸ã®æ¥ç¶šï¼localhostã‚’æ¥ç¶šå…ˆã®IP Addressï¼ˆ"133.42.155.201"å½¢å¼ï¼‰ã«è¨­å®šã™ã‚‹ã¨ä»–ã®PCã®ã‚µãƒ¼ãƒã¨é€šä¿¡ã§ãã‚‹
-			//10000ã¯ãƒãƒ¼ãƒˆç•ªå·ï¼IP Addressã§æ¥ç¶šã™ã‚‹PCã‚’æ±ºã‚ã¦ï¼Œãƒãƒ¼ãƒˆç•ªå·ã§ãã®PCä¸Šå‹•ä½œã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ç‰¹å®šã™ã‚‹
+			//"localhost"‚ÍC©•ª“à•”‚Ö‚ÌÚ‘±Dlocalhost‚ğÚ‘±æ‚ÌIP Addressi"133.42.155.201"Œ`®j‚Éİ’è‚·‚é‚Æ‘¼‚ÌPC‚ÌƒT[ƒo‚Æ’ÊM‚Å‚«‚é
+			//10000‚Íƒ|[ƒg”Ô†DIP Address‚ÅÚ‘±‚·‚éPC‚ğŒˆ‚ß‚ÄCƒ|[ƒg”Ô†‚Å‚»‚ÌPCã“®ì‚·‚éƒvƒƒOƒ‰ƒ€‚ğ“Á’è‚·‚é
 			socket = new Socket(myIp, 10000);
 		} catch (UnknownHostException e) {
-			System.err.println("ãƒ›ã‚¹ãƒˆã® IP ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒåˆ¤å®šã§ãã¾ã›ã‚“: " + e);
+			System.err.println("ƒzƒXƒg‚Ì IP ƒAƒhƒŒƒX‚ª”»’è‚Å‚«‚Ü‚¹‚ñ: " + e);
 		} catch (IOException e) {
-			System.err.println("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+			System.err.println("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 		}
 
-		MesgRecvThread mrt = new MesgRecvThread(socket, myName);//å—ä¿¡ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ä½œæˆã™ã‚‹
-		mrt.start();//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å‹•ã‹ã™ï¼ˆRunãŒå‹•ãï¼‰
+		MesgRecvThread mrt = new MesgRecvThread(socket, myName);//óM—p‚ÌƒXƒŒƒbƒh‚ğì¬‚·‚é
+		mrt.start();//ƒXƒŒƒbƒh‚ğ“®‚©‚·iRun‚ª“®‚­j
 	}
 
-	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ã®ãŸã‚ã®ã‚¹ãƒ¬ãƒƒãƒ‰
+	//ƒƒbƒZ[ƒWóM‚Ì‚½‚ß‚ÌƒXƒŒƒbƒh
 	public class MesgRecvThread extends Thread {
 
 		Socket socket;
@@ -84,13 +84,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			myName = n;
 		}
 
-		//é€šä¿¡çŠ¶æ³ã‚’ç›£è¦–ã—ï¼Œå—ä¿¡ãƒ‡ãƒ¼ã‚¿ã«ã‚ˆã£ã¦å‹•ä½œã™ã‚‹
+		//’ÊMó‹µ‚ğŠÄ‹‚µCóMƒf[ƒ^‚É‚æ‚Á‚Ä“®ì‚·‚é
 		public void run() {
 			try{
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
-				out.println(myName);//æ¥ç¶šã®æœ€åˆã«åå‰ã‚’é€ã‚‹
+				out.println(myName);//Ú‘±‚ÌÅ‰‚É–¼‘O‚ğ‘—‚é
 
 				String myNumberStr = br.readLine();
 				int myNumberInt = Integer.parseInt(myNumberStr);
@@ -106,7 +106,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = whiteIcon;
 					setTurn();
 
-					//ã‚ãªãŸã®ã„ã‚
+					//‚ ‚È‚½‚Ì‚¢‚ë
 					ImageIcon myblackIcon = new ImageIcon("images/myblack.png");
 					JLabel myblackLabel = new JLabel(myblackIcon);
 					c.add(myblackLabel);
@@ -119,7 +119,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = blackIcon;
 					setTurn();
 
-					//ã‚ãªãŸã®ã„ã‚
+					//‚ ‚È‚½‚Ì‚¢‚ë
 					ImageIcon mywhiteIcon = new ImageIcon("images/mywhite.png");
 					JLabel mywhiteLabel = new JLabel(mywhiteIcon);
 					c.add(mywhiteLabel);
@@ -129,22 +129,22 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 
 				while(true) {
-					String inputLine = br.readLine();//ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€è¡Œåˆ†ã ã‘èª­ã¿è¾¼ã‚“ã§ã¿ã‚‹
-					if (inputLine != null) {//èª­ã¿è¾¼ã‚“ã ã¨ãã«ãƒ‡ãƒ¼ã‚¿ãŒèª­ã¿è¾¼ã¾ã‚ŒãŸã‹ã©ã†ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
-						System.out.println(inputLine);//ãƒ‡ãƒãƒƒã‚°ï¼ˆå‹•ä½œç¢ºèªç”¨ï¼‰ã«ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«å‡ºåŠ›ã™ã‚‹
-						String[] inputTokens = inputLine.split(" ");	//å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ã‚’è§£æã™ã‚‹ãŸã‚ã«ã€ã‚¹ãƒšãƒ¼ã‚¹ã§åˆ‡ã‚Šåˆ†ã‘ã‚‹
-						String cmd = inputTokens[0];//ã‚³ãƒãƒ³ãƒ‰ã®å–ã‚Šå‡ºã—ï¼ï¼‘ã¤ç›®ã®è¦ç´ ã‚’å–ã‚Šå‡ºã™
-						if(cmd.equals("MOVE")){//cmdã®æ–‡å­—ã¨"MOVE"ãŒåŒã˜ã‹èª¿ã¹ã‚‹ï¼åŒã˜æ™‚ã«trueã¨ãªã‚‹
-							//MOVEã®æ™‚ã®å‡¦ç†(ã‚³ãƒã®ç§»å‹•ã®å‡¦ç†)
-							String theBName = inputTokens[1];//ãƒœã‚¿ãƒ³ã®åå‰ï¼ˆç•ªå·ï¼‰ã®å–å¾—
-							int theBnum = Integer.parseInt(theBName);//ãƒœã‚¿ãƒ³ã®åå‰ã‚’æ•°å€¤ã«å¤‰æ›ã™ã‚‹
-							int x = Integer.parseInt(inputTokens[2]);//æ•°å€¤ã«å¤‰æ›ã™ã‚‹
-							int y = Integer.parseInt(inputTokens[3]);//æ•°å€¤ã«å¤‰æ›ã™ã‚‹
+					String inputLine = br.readLine();//ƒf[ƒ^‚ğˆês•ª‚¾‚¯“Ç‚İ‚ñ‚Å‚İ‚é
+					if (inputLine != null) {//“Ç‚İ‚ñ‚¾‚Æ‚«‚Éƒf[ƒ^‚ª“Ç‚İ‚Ü‚ê‚½‚©‚Ç‚¤‚©‚ğƒ`ƒFƒbƒN‚·‚é
+						System.out.println(inputLine);//ƒfƒoƒbƒOi“®ìŠm”F—pj‚ÉƒRƒ“ƒ\[ƒ‹‚Éo—Í‚·‚é
+						String[] inputTokens = inputLine.split(" ");	//“ü—Íƒf[ƒ^‚ğ‰ğÍ‚·‚é‚½‚ß‚ÉAƒXƒy[ƒX‚ÅØ‚è•ª‚¯‚é
+						String cmd = inputTokens[0];//ƒRƒ}ƒ“ƒh‚Ìæ‚èo‚µD‚P‚Â–Ú‚Ì—v‘f‚ğæ‚èo‚·
+						if(cmd.equals("MOVE")){//cmd‚Ì•¶š‚Æ"MOVE"‚ª“¯‚¶‚©’²‚×‚éD“¯‚¶‚Étrue‚Æ‚È‚é
+							//MOVE‚Ì‚Ìˆ—(ƒRƒ}‚ÌˆÚ“®‚Ìˆ—)
+							String theBName = inputTokens[1];//ƒ{ƒ^ƒ“‚Ì–¼‘Oi”Ô†j‚Ìæ“¾
+							int theBnum = Integer.parseInt(theBName);//ƒ{ƒ^ƒ“‚Ì–¼‘O‚ğ”’l‚É•ÏŠ·‚·‚é
+							int x = Integer.parseInt(inputTokens[2]);//”’l‚É•ÏŠ·‚·‚é
+							int y = Integer.parseInt(inputTokens[3]);//”’l‚É•ÏŠ·‚·‚é
 
 							int i = theBnum % 8;
 							int j = theBnum / 8;
 
-							buttonArray[i][j].setLocation(x,y);//æŒ‡å®šã®ãƒœã‚¿ãƒ³ã‚’ä½ç½®ã‚’x,yã«è¨­å®šã™ã‚‹
+							buttonArray[i][j].setLocation(x,y);//w’è‚Ìƒ{ƒ^ƒ“‚ğˆÊ’u‚ğx,y‚Éİ’è‚·‚é
 						}else if(cmd.equals("PLACE")){
 
 							String theBName = inputTokens[1];
@@ -152,71 +152,44 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int theColor = Integer.parseInt(inputTokens[2]);
 							int i = theBnum % 8;
 							int j = theBnum / 8;
-
-							  if(myTurn == 3){//é»’ã®ã‚¿ãƒ¼ãƒ³ã®æ™‚
-								  if(theColor == 0){//é»’ã®å‘½ä»¤ã ã‘å—ã‘ä»˜ã‘ã‚‹
-										if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(myIcon);
-											//agentLabel.setText("ç½®ã„ãŸã§ã€‚");
-											myIconCount++; //è‡ªåˆ†ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-										  myTurn = 1; //myTurn==1ã®ã¨ãç™½
-									  } else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(yourIcon);
-											yourIconCount++; //ç›¸æ‰‹ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-											myTurn = 1; //myTurn==1ã®ã¨ãç™½
-										}
-										countTurn();
-									}
-							  } else if(myTurn == 1){ //ç™½ã®ã‚¿ãƒ¼ãƒ³ã®æ™‚
-								  if(theColor == 1){
-									  if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(myIcon);
-											//agentLabel.setText("ç½®ã„ãŸã§ã€‚");
-											myIconCount++;
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-											myTurn = 0;
-									  } else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(yourIcon);
-											yourIconCount++;
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-											myTurn = 0;
-										}
-										countTurn();
-								  }
-							  } else {
-									if(theColor == 0){
-										if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(myIcon);
-											//agentLabel.setText("ç½®ã„ãŸã§ã€‚");
-											myIconCount++;
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-											myTurn = 1;
-									  } else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
-											buttonArray[i][j].setIcon(yourIcon);
-											yourIconCount++;
-											//myIconCLabel.setText("Ã—" + myIconCount);
-											//yourIconCLabel.setText("Ã—" + yourIconCount);
-											myTurn = 1;
-										}
-										countTurn();
-									}
+							
+							if(myTurn == 3){
+								if(theColor == myColor){
+									//‘—MŒ³
+									buttonArray[i][j].setIcon(myIcon);
+									myIconCount++; //©•ª‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+								} else {
+									//‘—Mæ
+									buttonArray[i][j].setIcon(yourIcon);
+									yourIconCount++; //‘Šè‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
 								}
-
-								setTurn();
-								movePointer(myIconCount, yourIconCount);
+								myTurn = 1;
+							} else if(myTurn == 0){
+								if(theColor == myColor){
+									//‘—MŒ³
+									buttonArray[i][j].setIcon(myIcon);
+									myIconCount++; //©•ª‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+								} else {
+									//‘—Mæ
+									buttonArray[i][j].setIcon(yourIcon);
+									yourIconCount++; //‘Šè‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+								}
+								myTurn = 1;
+							} else {
+								if(theColor == myColor){
+									//‘—MŒ³
+									buttonArray[i][j].setIcon(myIcon);
+									myIconCount++;
+								} else {
+									//‘—MæƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
+									buttonArray[i][j].setIcon(yourIcon);
+									yourIconCount++;
+								}
+								myTurn = 0;
+							}
+							setTurn();
+							countTurn();
+							movePointer(myIconCount, yourIconCount);
 
 						}else if(cmd.equals("FLIP")){
 
@@ -226,15 +199,15 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int i = theBnum % 8;
 							int j = theBnum / 8;
 
-							if(myTurn == 3){ //é»’ã®ã‚¿ãƒ¼ãƒ³ã®æ™‚
-									if(theColor == 0){ //é»’ã®å‘½ä»¤ã—ã‹å—ã‘ä»˜ã‘ãªã„
+							if(myTurn == 3){ //•‚Ìƒ^[ƒ“‚Ì
+									if(theColor == 0){ //•‚Ì–½—ß‚µ‚©ó‚¯•t‚¯‚È‚¢
 										if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MŒ³ƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											myIconCount++;
 											yourIconCount--;
 											buttonArray[i][j].setIcon(myIcon);
 									  } else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MæƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											yourIconCount++;
 											myIconCount--;
 											buttonArray[i][j].setIcon(yourIcon);
@@ -243,12 +216,12 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							} else if(myTurn == 0){
 									if(theColor == 0){
 										if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MŒ³ƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											myIconCount++;
 											yourIconCount--;
 											buttonArray[i][j].setIcon(myIcon);
 										} else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MæƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											yourIconCount++;
 											myIconCount--;
 											buttonArray[i][j].setIcon(yourIcon);
@@ -257,12 +230,12 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							} else {
 									if(theColor == 1){
 										if(theColor == myColor){
-											//é€ä¿¡å…ƒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MŒ³ƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											myIconCount++;
 											yourIconCount--;
 											buttonArray[i][j].setIcon(myIcon);
 										} else {
-											//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
+											//‘—MæƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
 											yourIconCount++;
 											myIconCount--;
 											buttonArray[i][j].setIcon(yourIcon);
@@ -272,55 +245,36 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 						}else if(cmd.equals("PASS")){
 							int theTurn = Integer.parseInt(inputTokens[1]);//myTurn
 							int theColor = Integer.parseInt(inputTokens[2]);//myColor
-
-							/*if(theColor == 0){
-								if(theTurn == 3){ //åˆã‚¿ãƒ¼ãƒ³ã§ãƒ‘ã‚¹ã®å ´åˆã¯ç™½ï¼ˆ1ï¼‰ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
-									if(theColor == myColor){
-										turnLabel.setText("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									} else {
-										turnLabel.setText("ã‚ãªãŸã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									}
-									myTurn = 1;
-									countTurn();
-							  }
-						  }
-							if(theTurn == theColor){
-								if(theTurn == 1){ //ç™½ã®ã‚¿ãƒ¼ãƒ³
-									if(theColor == myColor){
-										turnLabel.setText("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									} else {
-										turnLabel.setText("ã‚ãªãŸã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									}
-									myTurn = 0;
-								} else {
-									if(theColor == myColor){ //é»’ã®ã‚¿ãƒ¼ãƒ³
-										turnLabel.setText("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									} else {
-										turnLabel.setText("ã‚ãªãŸã®ã‚¿ãƒ¼ãƒ³ã§ã™");
-									}
-									myTurn = 1;
-							  }
-								countTurn();
+							
+							//‰ƒ^[ƒ“‚ÅƒpƒX
+							if(myTurn == 3){
+								myTurn = 1;
+								setTurn();
+							} else if(myTurn == 0){
+								setTurn();
+								myTurn = 1;
 							} else {
-								System.out.println("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã«ã¯ãƒ‘ã‚¹ã§ãã¾ã›ã‚“ã€‚");
-							} */
+								setTurn();
+								myTurn = 0;
+							}
+							
 
 						} else if(cmd.equals("RESET")) {
-							int theColor = Integer.parseInt(inputTokens[1]);
+							/*int theColor = Integer.parseInt(inputTokens[1]);
 							if(theColor == 0){
 								if(theColor == myColor){
-									turnLabel.setText("ã‚ãªãŸã®ã‚¿ãƒ¼ãƒ³ã§ã™");
+									turnLabel.setText("‚ ‚È‚½‚Ìƒ^[ƒ“‚Å‚·");
 								} else {
-									turnLabel.setText("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã§ã™");
+									turnLabel.setText("‘Šè‚Ìƒ^[ƒ“‚Å‚·");
 								}
 							} else {
 								if(theColor == myColor){
-									turnLabel.setText("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã§ã™");
+									turnLabel.setText("‘Šè‚Ìƒ^[ƒ“‚Å‚·");
 								} else {
-									turnLabel.setText("ã‚ãªãŸã®ã‚¿ãƒ¼ãƒ³ã§ã™");
+									turnLabel.setText("‚ ‚È‚½‚Ìƒ^[ƒ“‚Å‚·");
 								}
 							}
-							resetAll();
+							resetAll(); */
 						}
 					}else{
 						break;
@@ -329,7 +283,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 				socket.close();
 			} catch (IOException e) {
-				System.err.println("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
+				System.err.println("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
 			}
 		}
 	}
@@ -339,92 +293,112 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		net.setVisible(true);
 	}
 
-	public void mouseClicked(MouseEvent e) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã®å‡¦ç†
-		System.out.println("ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
-		JButton theButton = (JButton)e.getComponent();//ã‚¯ãƒªãƒƒã‚¯ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ï¼å‹ãŒé•ã†ã®ã§ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹
-		Icon theIcon = theButton.getIcon();//theIconã«ã¯ï¼Œç¾åœ¨ã®ãƒœã‚¿ãƒ³ã«è¨­å®šã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ãŒå…¥ã‚‹
+	public void mouseClicked(MouseEvent e) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Ìˆ—
+		System.out.println("ƒNƒŠƒbƒN‚µ‚Ü‚µ‚½"); //ƒfƒoƒbƒN
+		JButton theButton = (JButton)e.getComponent();//ƒNƒŠƒbƒN‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ“¾‚éDŒ^‚ªˆá‚¤‚Ì‚ÅƒLƒƒƒXƒg‚·‚é
+		Icon theIcon = theButton.getIcon();//theIcon‚É‚ÍCŒ»İ‚Ìƒ{ƒ^ƒ“‚Éİ’è‚³‚ê‚½ƒAƒCƒRƒ“‚ª“ü‚é
 
 		//if(theButton.getText().equals("PASS")){
 		//	System.out.println("PURESS THE PASS BUTOON");
 		//}
 
 		if(theIcon.equals(boardIcon)){
-			String theArrayIndex = theButton.getActionCommand();//ãƒœã‚¿ãƒ³ã®é…åˆ—ã®ç•ªå·ã‚’å–ã‚Šå‡ºã™
+			String theArrayIndex = theButton.getActionCommand();//ƒ{ƒ^ƒ“‚Ì”z—ñ‚Ì”Ô†‚ğæ‚èo‚·
 			int temp = Integer.parseInt(theArrayIndex);
 			int tempx = temp / 8;
 			int tempy = temp % 8;
 			//System.out.println("tempx = " + tempx + "tempy = " + tempy);
 			if(judgeButton(tempy, tempx)){
-				//ãŠã‘ã‚‹
-				String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
-				//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
-				out.println(msg);//é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ•ã‚¡ã«æ›¸ãå‡ºã™
-				out.flush();//é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ï¼ˆãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ä¸Šã«ã¯ãå‡ºã™ï¼‰ã™ã‚‹ 70è¡Œç›®
-				repaint();//ç”»é¢ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æç”»ã—ç›´ã™
+				//‚¨‚¯‚é
+				Icon whichTurn = imturnLabel.getIcon();
+				if(whichTurn.equals(myturnIcon)){
+					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
+					//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
+					out.println(msg);
+					out.flush();
+					repaint();
+				} else {
+					System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚Í’u‚¯‚Ü‚¹‚ñ");
+				}
+				
 			} else {
-				//ç½®ã‘ãªã„
-				//System.out.println("ãã“ã«ã¯é…ç½®ã§ãã¾ã›ã‚“");
-				agentLabel.setText("ãã“ã«ã¯ç½®ã‹ã‚Œã¸ã‚“ã§ã€‚");
+				//’u‚¯‚È‚¢
 			}
-			repaint();//ç”»é¢ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æç”»ã—ç›´ã™
+			repaint();//‰æ–Ê‚ÌƒIƒuƒWƒFƒNƒg‚ğ•`‰æ‚µ’¼‚·
 
 		} else if(theIcon.equals(passIcon)){
+				Icon whichTurn = imturnLabel.getIcon();
 				String msg = "PASS" + " " + myTurn + " " + myColor;
-				//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
+				//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
+				if(whichTurn.equals(myturnIcon)){
 				out.println(msg);
 				out.flush();
 				repaint();
-
+				} else {
+					System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚ÍƒpƒX‚Å‚«‚Ü‚¹‚ñ");
+				}
+				
 		} else if(theIcon.equals(resetIcon)){
 				String msg = "RESET"+ " " + myColor;
-				//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
+				//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
 				out.println(msg);
 				out.flush();
 				repaint();
 		}
 	}
 
-	public void mouseEntered(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å…¥ã£ãŸã¨ãã®å‡¦ç†
-		//System.out.println("ãƒã‚¦ã‚¹ãŒå…¥ã£ãŸ");
+	public void mouseEntered(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒg‚É“ü‚Á‚½‚Æ‚«‚Ìˆ—
+		//System.out.println("ƒ}ƒEƒX‚ª“ü‚Á‚½");
 	}
 
-	public void mouseExited(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰å‡ºãŸã¨ãã®å‡¦ç†
-		//System.out.println("ãƒã‚¦ã‚¹è„±å‡º");
+	public void mouseExited(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒg‚©‚ço‚½‚Æ‚«‚Ìˆ—
+		//System.out.println("ƒ}ƒEƒX’Eo");
 	}
 
-	public void mousePressed(MouseEvent e) {//ãƒã‚¦ã‚¹ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŠ¼ã—ãŸã¨ãã®å‡¦ç†ï¼ˆã‚¯ãƒªãƒƒã‚¯ã¨ã®é•ã„ã«æ³¨æ„ï¼‰
-		//System.out.println("ãƒã‚¦ã‚¹ã‚’æŠ¼ã—ãŸ");
+	public void mousePressed(MouseEvent e) {//ƒ}ƒEƒX‚ÅƒIƒuƒWƒFƒNƒg‚ğ‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—iƒNƒŠƒbƒN‚Æ‚Ìˆá‚¢‚É’ˆÓj
+		//System.out.println("ƒ}ƒEƒX‚ğ‰Ÿ‚µ‚½");
 	}
 
-	public void mouseReleased(MouseEvent e) {//ãƒã‚¦ã‚¹ã§æŠ¼ã—ã¦ã„ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é›¢ã—ãŸã¨ãã®å‡¦ç†
-		//System.out.println("ãƒã‚¦ã‚¹ã‚’æ”¾ã—ãŸ");
+	public void mouseReleased(MouseEvent e) {//ƒ}ƒEƒX‚Å‰Ÿ‚µ‚Ä‚¢‚½ƒIƒuƒWƒFƒNƒg‚ğ—£‚µ‚½‚Æ‚«‚Ìˆ—
+		//System.out.println("ƒ}ƒEƒX‚ğ•ú‚µ‚½");
 	}
 
-	public void mouseDragged(MouseEvent e) {//ãƒã‚¦ã‚¹ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã‚’ãƒ‰ãƒ©ãƒƒã‚°ã—ã¦ã„ã‚‹ã¨ãã®å‡¦ç†
+	public void mouseDragged(MouseEvent e) {//ƒ}ƒEƒX‚ÅƒIƒuƒWƒFƒNƒg‚Æ‚ğƒhƒ‰ƒbƒO‚µ‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
 	}
 
-	public void mouseMoved(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šã§ç§»å‹•ã—ãŸã¨ãã®å‡¦ç†
+	public void mouseMoved(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒgã‚ÅˆÚ“®‚µ‚½‚Æ‚«‚Ìˆ—
 	}
 
 	public boolean judgeButton(int y, int x){
-		//System.out.println("judgeButtonãŒå‘¼ã°ã‚Œã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
+		//System.out.println("judgeButton‚ªŒÄ‚Î‚ê‚Ü‚µ‚½"); //ƒfƒoƒbƒN
 		boolean flag = false;
 		Icon IconComp;
 			for(int i=-1; i<=1; i++){
 				for(int j=-1; j<=1; j++){
-					if(flipButtons(y, x, j, i) >= 1){ //ä¸€ã¤ä»¥ä¸Šè£è¿”ã›ã‚‹å ´åˆ
+					if(flipButtons(y, x, j, i) >= 1){ //ˆê‚ÂˆÈã— •Ô‚¹‚éê‡
 						IconComp = buttonArray[y+j][x+i].getIcon();
 						//System.out.println("y+j="+(y+j)+", x+i="+(x+i));
 						flag = true;
 
 						for(int dy=j, dx=i, k=0; k<flipNum; k++, dy+=j, dx+=i){
-							//ãƒœã‚¿ãƒ³ã®ä½ç½®æƒ…å ±ã‚’ä½œã‚‹
+							//ƒ{ƒ^ƒ“‚ÌˆÊ’uî•ñ‚ğì‚é
 							int msgy = y + dy;
 							int msgx = x + dx;
 							int theArrayIndex = msgx*8 + msgy;
-							//System.out.println("ã²ã£ãã‚Šè¿”ã™ç•ªå·ã¯ã“ã‚Œã§ã™" + theArrayIndex);
+							Icon whichTurn = imturnLabel.getIcon();
+							
+							//©•ª‚Ìƒ^[ƒ“‚Ì‚Æ‚«‚¾‚¯ƒtƒŠƒbƒv‘—M
+							if(whichTurn.equals(myturnIcon)){
+								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
+								out.println(msg);
+								out.flush();
+								repaint();
+							} else {
+								System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚Í— •Ô‚¹‚Ü‚¹‚ñ");
+							}
+							
 
-							if(!(IconComp.equals(boardIcon))){ //ç›¸æ‰‹ã®è‰²ã®æ™‚ã®ã¿é€ä¿¡ã—ã¾ã™(11/8ä¿®æ­£)
+							/*if(!(IconComp.equals(boardIcon))){ //‘Šè‚ÌF‚Ì‚Ì‚İ‘—M‚µ‚Ü‚·(11/8C³)
 								if(myColor == 0){
 									if(!(IconComp.equals(blackIcon))){
 										String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
@@ -440,10 +414,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 										repaint();
 									}
 								}
-							}
+							} */
 						}
-					} else { //ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„
-						//System.out.println("ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„"); //ãƒ‡ãƒãƒƒã‚¯
+					} else { //‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢
+						//System.out.println("‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢"); //ƒfƒoƒbƒN
 					}
 				}
 			}
@@ -451,14 +425,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public int flipButtons(int y, int x, int j, int i){
-		//System.out.println("flipButtonsãŒå‘¼ã°ã‚Œã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
+		//System.out.println("flipButtons‚ªŒÄ‚Î‚ê‚Ü‚µ‚½"); //ƒfƒoƒbƒN
 		Icon IconRev;
-		flipNum = 0; //åˆæœŸåŒ–
-		for(int dy=j, dx=i; ; dy+=j, dx+=i) { //çµ‚äº†æ¡ä»¶ãŒç©ºã§ã™
+		flipNum = 0; //‰Šú‰»
+		for(int dy=j, dx=i; ; dy+=j, dx+=i) { //I—¹ğŒ‚ª‹ó‚Å‚·
 			try{
 				IconRev = buttonArray[(y+dy)][(x+dx)].getIcon();
-				//System.out.println("y+dy = " + (y+dy) + " " + "x+dx = " + (x+dx)); //ãƒ‡ãƒãƒƒã‚¯
-				//System.out.println("IconRev = " + IconRev); //ãƒ‡ãƒãƒƒã‚¯
+				//System.out.println("y+dy = " + (y+dy) + " " + "x+dx = " + (x+dx)); //ƒfƒoƒbƒN
+				//System.out.println("IconRev = " + IconRev); //ƒfƒoƒbƒN
 				if(dy == 0){
 					if(dx == 0){
 						flipNum = 0;
@@ -467,18 +441,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 
 				if(IconRev.equals(boardIcon)){
-				//System.out.println("ãã®æ–¹å‘ã«ã¯ç·‘ãŒã‚ã‚‹ã‚ˆ");
+				//System.out.println("‚»‚Ì•ûŒü‚É‚Í—Î‚ª‚ ‚é‚æ");
 				flipNum = 0;
 				break;
 				} else if(IconRev.equals(myIcon)) {
-					//System.out.println("ãã®æ–¹å‘ã«ã¯å›ã®è‰²ãŒã‚ã‚‹ã‚ˆ");
+					//System.out.println("‚»‚Ì•ûŒü‚É‚ÍŒN‚ÌF‚ª‚ ‚é‚æ");
 					break;
 				} else if(IconRev.equals(yourIcon)){
-					//System.out.println("ã¾ã é€²ã‚ã‚‹ã‚ˆ");
+					//System.out.println("‚Ü‚¾i‚ß‚é‚æ");
 					flipNum++;
 				}
 			}catch(ArrayIndexOutOfBoundsException e){
-				//System.out.println("ãã®æ–¹å‘ã«ã¯ç›¤é¢ãŒã‚ã‚Šã¾ã›ã‚“");
+				//System.out.println("‚»‚Ì•ûŒü‚É‚Í”Õ–Ê‚ª‚ ‚è‚Ü‚¹‚ñ");
 				flipNum = 0;
 				break;
 			}
@@ -487,35 +461,35 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void setUp(){
-		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã™ã‚‹
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹ã¨ãã«ï¼Œæ­£ã—ãé–‰ã˜ã‚‹ã‚ˆã†ã«è¨­å®šã™ã‚‹
-		setTitle("MyClient");//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¨­å®šã™ã‚‹
-		setSize(1050,1000);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºã‚’è¨­å®šã™ã‚‹
-		c = getContentPane();//ãƒ•ãƒ¬ãƒ¼ãƒ ã®ãƒšã‚¤ãƒ³ã‚’å–å¾—ã™ã‚‹
+		//ƒEƒBƒ“ƒhƒE‚ğì¬‚·‚é
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é‚Æ‚«‚ÉC³‚µ‚­•Â‚¶‚é‚æ‚¤‚Éİ’è‚·‚é
+		setTitle("MyClient");//ƒEƒBƒ“ƒhƒE‚Ìƒ^ƒCƒgƒ‹‚ğİ’è‚·‚é
+		setSize(1050,1000);//ƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY‚ğİ’è‚·‚é
+		c = getContentPane();//ƒtƒŒ[ƒ€‚ÌƒyƒCƒ“‚ğæ“¾‚·‚é
 
-		//ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š
+		//ƒAƒCƒRƒ“‚Ìİ’è
 		whiteIcon = new ImageIcon("images/White.png");
 		blackIcon = new ImageIcon("images/Black.png");
 		boardIcon = new ImageIcon("images/GreenFrame.png");
 		passIcon = new ImageIcon("images/pass.png");
 		resetIcon = new ImageIcon("images/reset.jpg");
 
-		c.setLayout(null);//è‡ªå‹•ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®è¨­å®šã‚’è¡Œã‚ãªã„
-		//ãƒœã‚¿ãƒ³ã®ç”Ÿæˆ
+		c.setLayout(null);//©“®ƒŒƒCƒAƒEƒg‚Ìİ’è‚ğs‚í‚È‚¢
+		//ƒ{ƒ^ƒ“‚Ì¶¬
 
 		buttonArray = new JButton[8][8];
 
 		for(int j=0;j<8;j++){
 			for(int i=0;i<8;i++){
-			buttonArray[i][j] = new JButton(boardIcon);//ãƒœã‚¿ãƒ³ã«ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®šã™ã‚‹
-			c.add(buttonArray[i][j]);//ãƒšã‚¤ãƒ³ã«è²¼ã‚Šä»˜ã‘ã‚‹
+			buttonArray[i][j] = new JButton(boardIcon);//ƒ{ƒ^ƒ“‚ÉƒAƒCƒRƒ“‚ğİ’è‚·‚é
+			c.add(buttonArray[i][j]);//ƒyƒCƒ“‚É“\‚è•t‚¯‚é
 
-			buttonArray[i][j].setBounds(i*50+620,j*50+10,50,50);//ãƒœã‚¿ãƒ³ã®å¤§ãã•ã¨ä½ç½®ã‚’è¨­å®šã™ã‚‹ï¼(xåº§æ¨™ï¼Œyåº§æ¨™,xã®å¹…,yã®å¹…ï¼‰
-			buttonArray[i][j].addMouseListener(this);//ãƒœã‚¿ãƒ³ã‚’ãƒã‚¦ã‚¹ã§ã•ã‚ã£ãŸã¨ãã«åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
-			buttonArray[i][j].addMouseMotionListener(this);//ãƒœã‚¿ãƒ³ã‚’ãƒã‚¦ã‚¹ã§å‹•ã‹ãã†ã¨ã—ãŸã¨ãã«åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
-			buttonArray[i][j].setActionCommand(Integer.toString(j*8+i));//ãƒœã‚¿ãƒ³ã«é…åˆ—ã®æƒ…å ±ã‚’ä»˜åŠ ã™ã‚‹ï¼ˆãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚’ä»‹ã—ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è­˜åˆ¥ã™ã‚‹ãŸã‚ï¼‰
-			buttonArray[i][j].setContentAreaFilled(false); //ãƒœã‚¿ãƒ³èƒŒæ™¯ã®é€æ˜åŒ–
-			//buttonArray[i][j].setBorderPainted(false); //ç·šã®é€æ˜åŒ–
+			buttonArray[i][j].setBounds(i*50+620,j*50+10,50,50);//ƒ{ƒ^ƒ“‚Ì‘å‚«‚³‚ÆˆÊ’u‚ğİ’è‚·‚éD(xÀ•WCyÀ•W,x‚Ì•,y‚Ì•j
+			buttonArray[i][j].addMouseListener(this);//ƒ{ƒ^ƒ“‚ğƒ}ƒEƒX‚Å‚³‚í‚Á‚½‚Æ‚«‚É”½‰‚·‚é‚æ‚¤‚É‚·‚é
+			buttonArray[i][j].addMouseMotionListener(this);//ƒ{ƒ^ƒ“‚ğƒ}ƒEƒX‚Å“®‚©‚»‚¤‚Æ‚µ‚½‚Æ‚«‚É”½‰‚·‚é‚æ‚¤‚É‚·‚é
+			buttonArray[i][j].setActionCommand(Integer.toString(j*8+i));//ƒ{ƒ^ƒ“‚É”z—ñ‚Ìî•ñ‚ğ•t‰Á‚·‚éiƒlƒbƒgƒ[ƒN‚ğ‰î‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ğ¯•Ê‚·‚é‚½‚ßj
+			buttonArray[i][j].setContentAreaFilled(false); //ƒ{ƒ^ƒ“”wŒi‚Ì“§–¾‰»
+			//buttonArray[i][j].setBorderPainted(false); //ü‚Ì“§–¾‰»
 		  }
 		}
 
@@ -525,60 +499,60 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		buttonArray[4][4].setIcon(whiteIcon);
 
 
-		//ãƒ¡ã‚¤ãƒ³ã‚¤ãƒ¡ãƒ¼ã‚¸
+		//ƒƒCƒ“ƒCƒ[ƒW
 		ImageIcon mainImIcon = new ImageIcon("images/64.jpg");
 		JLabel mainImLabel = new JLabel(mainImIcon);
 		c.add(mainImLabel);
 		mainImLabel.setBounds(10,10,600,400);
 		mainImLabel.setOpaque(true);
 
-		//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ ã»ã‹ã‹ã‚‰ä½¿ã†ã®ã§å¤–ã§å®£è¨€
+		//ƒ|ƒCƒ“ƒ^[ ‚Ù‚©‚©‚çg‚¤‚Ì‚ÅŠO‚ÅéŒ¾
 		c.add(pointerLabel);
 		pointerLabel.setBounds(282,420,60,60);
 		pointerLabel.setOpaque(true);
 
-		//ãƒãƒ¼
+		//ƒo[
 		ImageIcon barIcon = new ImageIcon("images/bar.png");
 		JLabel barLabel = new JLabel(barIcon);
 		c.add(barLabel);
 		barLabel.setBounds(10,465,600,50);
 		barLabel.setOpaque(true);
 
-		//ãƒ­ã‚°
+		//ƒƒO
 		ImageIcon logIcon = new ImageIcon("images/63.png");
 		JLabel logLabel = new JLabel(logIcon);
 		c.add(logLabel);
 		logLabel.setBounds(10,540,600,300);
 		logLabel.setOpaque(true);
 
-		//ãƒ‘ã‚¹ãƒœã‚¿ãƒ³
+		//ƒpƒXƒ{ƒ^ƒ“
 		passButton = new JButton(passIcon);
 		c.add(passButton);
 		passButton.setBounds(620,535,200,60);
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
 
-		/*//passãƒœã‚¿ãƒ³
+		/*//passƒ{ƒ^ƒ“
 		passButton = new JButton(passIcon);
-		c.add(passButton);//ãƒšã‚¤ãƒ³ã«è²¼ã‚Šä»˜ã‘ã‚‹
+		c.add(passButton);//ƒyƒCƒ“‚É“\‚è•t‚¯‚é
 		passButton.setBounds(430, 10 ,50, 50);
 		passButton.addMouseListener(this);*/
 
-		//resetãƒœã‚¿ãƒ³
+		//resetƒ{ƒ^ƒ“
 		resetButton = new JButton(resetIcon);
-		c.add(resetButton);//ãƒšã‚¤ãƒ³ã«è²¼ã‚Šä»˜ã‘ã‚‹
+		c.add(resetButton);//ƒyƒCƒ“‚É“\‚è•t‚¯‚é
 		resetButton.setBounds(490, 10 ,50, 50);
 		resetButton.addMouseListener(this);
 
-		/*//ã‚¿ãƒ¼ãƒ³ãƒ©ãƒ™ãƒ«ã®åˆæœŸè¨­å®š
+		/*//ƒ^[ƒ“ƒ‰ƒxƒ‹‚Ì‰Šúİ’è
 		c.add(turnLabel);
 		turnLabel.setBounds(430,80,150,50);
-		turnLabel.addMouseListener(this);//ãƒœã‚¿ãƒ³ã‚’ãƒã‚¦ã‚¹ã§ã•ã‚ã£ãŸã¨ãã«åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
-		turnLabel.setForeground(Color.BLACK); //æ–‡å­—è‰²ã®è¨­å®šï¼Colorã®è¨­å®šã¯ï¼Œã“ã®ãƒšãƒ¼ã‚¸ã‚’è¦‹ã¦ä¸‹ã•ã„ã€€http://www.javadrive.jp/tutorial/color/
-		turnLabel.setBackground(Color.WHITE); //æ–‡å­—ã®èƒŒæ™¯è‰²ã®è¨­å®šï¼
-		turnLabel.setOpaque(true);//ãƒ©ãƒ™ãƒ«ã‚’ä¸é€æ˜ã«ã—ãªã„ã¨èƒŒæ™¯è‰²ãŒè¦‹ãˆãªã„ã®ã§ï¼Œä¸é€æ˜ã«ã™ã‚‹ã™ã‚‹*/
+		turnLabel.addMouseListener(this);//ƒ{ƒ^ƒ“‚ğƒ}ƒEƒX‚Å‚³‚í‚Á‚½‚Æ‚«‚É”½‰‚·‚é‚æ‚¤‚É‚·‚é
+		turnLabel.setForeground(Color.BLACK); //•¶šF‚Ìİ’èDColor‚Ìİ’è‚ÍC‚±‚Ìƒy[ƒW‚ğŒ©‚Ä‰º‚³‚¢@http://www.javadrive.jp/tutorial/color/
+		turnLabel.setBackground(Color.WHITE); //•¶š‚Ì”wŒiF‚Ìİ’èD
+		turnLabel.setOpaque(true);//ƒ‰ƒxƒ‹‚ğ•s“§–¾‚É‚µ‚È‚¢‚Æ”wŒiF‚ªŒ©‚¦‚È‚¢‚Ì‚ÅC•s“§–¾‚É‚·‚é‚·‚é*/
 
-		/*//ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ©ãƒ™ãƒ«
+		/*//ƒ^[ƒ“ƒJƒEƒ“ƒgƒ‰ƒxƒ‹
 		c.add(tCountLabel);
 		tCountLabel.setBounds(430,140,100,50);
 		tCountLabel.addMouseListener(this);
@@ -593,7 +567,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		subLabel.setBackground(Color.WHITE);
 		subLabel.setOpaque(true);*/
 
-		/*//ã‚¢ã‚¤ã‚³ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ©ãƒ™ãƒ«
+		/*//ƒAƒCƒRƒ“ƒJƒEƒ“ƒgƒ‰ƒxƒ‹
 		c.add(myIconCLabel);
 		myIconCLabel.setBounds(480,260,50,50);
 		myIconCLabel.addMouseListener(this);
@@ -608,7 +582,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		yourIconCLabel.setBackground(Color.WHITE);
 		yourIconCLabel.setOpaque(true);*/
 
-		//ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®åˆæœŸè¨­å®š
+		//ƒG[ƒWƒFƒ“ƒg‚Ì‰Šúİ’è
 
 		/*c.add(agentLabel);
 		agentLabel.setBounds(250,450,200,100);
@@ -632,7 +606,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		agentLabelimg.setOpaque(true); */
 	}
 
-	//ãƒªã‚»ãƒƒãƒˆã®å‡¦ç†
+	//ƒŠƒZƒbƒg‚Ìˆ—
 	public void resetAll(){
 		for(int j=0;j<8;j++){
 			for(int i=0;i<8;i++){
@@ -650,23 +624,23 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		tCountLabel.setText("Turn " + TurnCount);
 		myIconCount = 2;
 		yourIconCount = 2;
-		myIconCLabel.setText("Ã—" + myIconCount);
-		yourIconCLabel.setText("Ã—" + yourIconCount);
+		myIconCLabel.setText("~" + myIconCount);
+		yourIconCLabel.setText("~" + yourIconCount);
 		countSub = Math.abs(myIconCount - yourIconCount);
-		subLabel.setText("ç›¸æ‰‹ã¨ã®å·®ã¯" + countSub + "ã§ã™");
+		subLabel.setText("‘Šè‚Æ‚Ì·‚Í" + countSub + "‚Å‚·");
 	}
 
-	//ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã—ã¦ã€çµ‚äº†åˆ¤å®šã«ã‚‚ãªã‚‹
+	//ƒ^[ƒ“ƒJƒEƒ“ƒg‚ğ‘‚â‚µ‚ÄAI—¹”»’è‚É‚à‚È‚é
 	public void countTurn(){
 		TurnCount++;
 		//tCountLabel.setText("Turn " + TurnCount);
-		//System.out.println("TurnCount = " + TurnCount); //ãƒ‡ãƒãƒƒã‚¯
+		//System.out.println("TurnCount = " + TurnCount); //ƒfƒoƒbƒN
 	}
 
 	public void movePointer(int my, int your){
 		//220
 		//countSub = Math.abs(my - your);
-		//subLabel.setText("ç›¸æ‰‹ã¨ã®å·®ã¯" + countSub + "ã§ã™");
+		//subLabel.setText("‘Šè‚Æ‚Ì·‚Í" + countSub + "‚Å‚·");
 		countSub = my - your;
 		pointerLabel.setLocation(282,420);
 		if(countSub == 0){
@@ -680,7 +654,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void setTurn(){
-		//åˆå›ã®å‡¦ç†
+		//‰‰ñ‚Ìˆ—
 		if(myTurn == 3){
 			if(myIcon.equals(blackIcon)){
 				imturnLabel.setIcon(myturnIcon);
@@ -688,8 +662,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				imturnLabel.setIcon(yourturnIcon);
 			}
 		} else {
-			//äºŒå›ç›®ä»¥é™ã®å‡¦ç†
+			//“ñ‰ñ–ÚˆÈ~‚Ìˆ—
 			Icon whichTurn = imturnLabel.getIcon();
+			System.out.println(whichTurn);
 			if(whichTurn.equals(myturnIcon)){
 				imturnLabel.setIcon(yourturnIcon);
 			} else {
