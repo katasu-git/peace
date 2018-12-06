@@ -15,7 +15,7 @@ import java.util.*;
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
 	private Container c;
-	private ImageIcon blackIcon, whiteIcon, boardIcon, passIcon,resetIcon;
+	private ImageIcon blackIcon, whiteIcon, boardIcon, passIcon, resetIcon, guideIcon ;
 	private int myColor;
 	private int myTurn = 3; //myTurn==3のとき初期ターンとする。myTurn==0は黒、1は白。
 	private ImageIcon myIcon, yourIcon;
@@ -25,11 +25,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private JButton passButton;
 	private JButton resetButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
+	private String chara = "";
+	private int guideCount = 1;
 
 	//ポインターのアイコン
 	ImageIcon pointerIcon = new ImageIcon("images/pointer.png");
 	JLabel pointerLabel = new JLabel(pointerIcon);
-	
+
 	//ポインターのカウント
 	JLabel pointcon = new JLabel();
 
@@ -246,10 +248,22 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 								setTurn();
 								myTurn = 0;
 							}
-							
+							countTurn();
 
 						} else if(cmd.equals("RESET")) {
 							//リセットボタンが押されたときの処理
+						} else if(cmd.equals("JUDGE")){
+							int theColor = Integer.parseInt(inputTokens[1]);//myColor
+							if(theColor == myColor){
+								//System.out.println("あなたの負けです");
+								tComment.setText("あなたの負けです");
+							} else {
+								//System.out.println("あなたの勝ちです");
+								tComment.setText("あなたの勝ちです");
+							}
+						} else if(cmd.equals("GUIDE")){
+							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
+							guideCount = theGuide;
 						}
 					}else{
 						break;
@@ -277,7 +291,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//	System.out.println("PURESS THE PASS BUTOON");
 		//}
 
-		if(theIcon.equals(boardIcon)){
+		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon)){
 			String theArrayIndex = theButton.getActionCommand();//ボタンの配列の番号を取り出す
 			int temp = Integer.parseInt(theArrayIndex);
 			int tempx = temp / 8;
@@ -406,6 +420,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				} else if(IconRev.equals(yourIcon)){
 					//System.out.println("まだ進めるよ");
 					flipNum++;
+				} else if(IconRev.equals(guideIcon)){
+					flipNum = 0;
+					break;
 				}
 			}catch(ArrayIndexOutOfBoundsException e){
 				//System.out.println("その方向には盤面がありません");
@@ -429,6 +446,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		boardIcon = new ImageIcon("images/GreenFrame.png");
 		passIcon = new ImageIcon("images/pass.png");
 		resetIcon = new ImageIcon("images/reset.png");
+		guideIcon = new ImageIcon("images/guideIcon.png");
 
 		c.setLayout(null);//自動レイアウトの設定を行わない
 		//ボタンの生成
@@ -559,6 +577,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		TurnCount++;
 		tComment.setText("今は" + TurnCount + "ターン目です");
 		tellStory(TurnCount);
+		guide();
+		System.out.println(guideCount);
+		if(guideCount == 0){
+			String msg = "JUDGE" + " " + myColor;
+			out.println(msg);
+			out.flush();
+			repaint();
+		}
 	}
 
 	public void movePointer(int my, int your){
@@ -589,6 +615,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		if(myTurn == 3){
 			if(myIcon.equals(blackIcon)){
 				imturnLabel.setIcon(myturnIcon);
+				//初回のガイド表示
+				guide();
 			} else {
 				imturnLabel.setIcon(yourturnIcon);
 			}
@@ -603,6 +631,67 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 		}
 	}
+	
+	public void guide(){
+		//初期化
+		guideCount = 0;
+		Icon IconComp;
+		Icon whichTurn = imturnLabel.getIcon();
+		if(whichTurn.equals(myturnIcon)){
+			for(int i=0; i<8; i++){
+				for(int j=0; j<8; j++){
+					IconComp = buttonArray[i][j].getIcon();
+					//System.out.println(IconComp);
+					if(IconComp == boardIcon){
+						//緑のとき探索開始
+						//System.out.println("ジャッジ開始");
+						judgeButton2(i,j);
+					}
+				}
+			}
+		} else {
+			//相手の場合はガイドをリセット
+			for(int i=0; i<8; i++){
+				for(int j=0; j<8; j++){
+					//すでにあるガイドは消す
+					IconComp = buttonArray[i][j].getIcon();
+					if(IconComp == guideIcon){
+						//System.out.println("ガイド消した");
+						buttonArray[i][j].setIcon(boardIcon);
+					}
+				}
+			}
+			
+		} 
+	}
+	
+	public void judgeButton2(int y, int x){
+		//System.out.println("judgeButton2が呼ばれました"); //デバック
+		boolean flag = false;
+		//Icon IconComp;
+			for(int i=-1; i<=1; i++){
+				for(int j=-1; j<=1; j++){
+					if(flipButtons(y, x, j, i) >= 1){ //一つ以上裏返せる場合
+						//System.out.println("flipNum" + flipNum);
+						//System.out.println("y = " + y + "x = " + x);
+						flag = true;
+						break;
+					} else { //ひとつも裏返せない
+						//System.out.println("ひとつも裏返せない"); //デバック
+					}
+				}
+			}
+			if(flag){
+				//System.out.println("アイコン変えたよ");
+				guideCount++;
+				String msg = "GUIDE" + " " + guideCount;
+				out.println(msg);
+				out.flush();
+				repaint();
+				buttonArray[y][x].setIcon(guideIcon);
+			}
+	}
+	
 	public void tellStory(int tCon){
 		
 		switch(tCon){
