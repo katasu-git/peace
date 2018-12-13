@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.awt.Color;
 
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
@@ -179,10 +180,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 								}
 								myTurn = 0;
 							}
-							movePointer(myIconCount, yourIconCount);
+							movePointer(myIconCount, yourIconCount); //相手との差を算出
 							endTurn();
-							/*setTurn();
-							countTurn();*/
 
 						} else if(cmd.equals("FLIP")) {
 
@@ -257,17 +256,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
 							guideCount = theGuide; //ガイドの数を両方に適応、共有する
-							System.out.println("guideCount = " + guideCount);
+							//System.out.println("guideCount = " + guideCount);
 							
 							//置けなければ勝敗判定
-							if(guideCount == 0){
-								Icon whichTurn = imturnLabel.getIcon();
-								if(whichTurn.equals(myturnIcon)){
-									tComment.setText("あなたの負けです");
-								} else {
-									tComment.setText("あなたの勝ちです");
-								}
-							}
+							whichWin();
 						}
 					}else{
 						break;
@@ -436,12 +428,27 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		}
 		return flipNum;
 	}
+	
+	public static void setFlame() {
+		JFrame frame = new JFrame();
+		// タイトル名を設定
+		frame.setTitle( "背景色を赤色に" );
+		// フレームの大きさを設定
+		frame.setSize( 400, 320 );
+		// ”×”ボタンを押した時の処理を設定
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		// 背景色の変更
+		frame.getContentPane().setBackground( Color.RED );
+		// フレームを表示
+		frame.setVisible( true );
+	}
 
 	public void setUp(){
 		//ウィンドウを作成する
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じるときに，正しく閉じるように設定する
 		setTitle("MyClient");//ウィンドウのタイトルを設定する
 		setSize(1050,1000);//ウィンドウのサイズを設定する
+		getContentPane().setBackground( Color.decode("#685653")); //背景色の変更
 		c = getContentPane();//フレームのペインを取得する
 
 		//アイコンの設定
@@ -487,21 +494,21 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//ポインターカウント ほかから使うので外で宣言
 		c.add(pointcon);
 		pointcon.setBounds(304,500,30,30);
-		pointcon.setOpaque(true);
 		pointcon.setText(Integer.toString(countSub));
+		//pointcon.setOpaque(true); //背景透明化
 		pointcon.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
 
 		//ポインター ほかから使うので外で宣言
 		c.add(pointerLabel);
 		pointerLabel.setBounds(282,420,60,60);
-		pointerLabel.setOpaque(true);
+		//pointerLabel.setOpaque(true);
 
 		//バー
 		ImageIcon barIcon = new ImageIcon("images/bar.png");
 		JLabel barLabel = new JLabel(barIcon);
 		c.add(barLabel);
 		barLabel.setBounds(10,465,600,50);
-		barLabel.setOpaque(true);
+		//barLabel.setOpaque(true);
 
 		//ログの中身 ほかでも使うので先頭で定義。
 		//JLabel logComment = new JLabel();
@@ -527,7 +534,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		JLabel logLabel = new JLabel(logIcon);
 		c.add(logLabel);
 		logLabel.setBounds(10,540,600,300);
-		logLabel.setOpaque(true);
+		//logLabel.setOpaque(true);
 
 
 		//パスボタン
@@ -708,8 +715,20 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
 		tellStory(TurnCount);
 	}
-
-
+	
+	//勝敗判定です
+	public void whichWin(){
+		if(guideCount == 0){
+			countSub = myIconCount - yourIconCount;
+			if(countSub > 0){
+				tComment.setText("あなたの勝ち！");
+			} else if(countSub==0){
+				tComment.setText("引き分け！");
+			} else {
+				tComment.setText("あなたの負け！");
+			}
+		}
+	}
 
 
 }
