@@ -622,7 +622,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void guide(){
-		System.out.println("endTurnが呼ばれた");
+		System.out.println("guide();が呼ばれた");
 		//初期化
 		guideCount = 0;
 		Icon IconComp;
@@ -639,6 +639,11 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					}
 				}
 			}
+			//forループ終わった後でガイドの数を送信、勝敗判定
+			String msg = "GUIDE" + " " + guideCount;
+			out.println(msg);
+			out.flush();
+			repaint();
 		} else {
 			//相手の場合はガイドをリセット
 			for(int i=0; i<8; i++){
@@ -651,7 +656,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					}
 				}
 			}
-
 		}
 	}
 
@@ -676,10 +680,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				guideCount++;
 				buttonArray[y][x].setIcon(guideIcon);
 			}
-			String msg = "GUIDE" + " " + guideCount;
-			out.println(msg);
-			out.flush();
-			repaint();
+			
 	}
 
 	public void tellStory(int tCon){
