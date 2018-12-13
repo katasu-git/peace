@@ -1,7 +1,3 @@
-//進捗　パスおよびターンカウントの実装 コマカウント実装(11/8)
-// リセットボタンの実装　初期化の関数化(11/15)
-//getIconで読んでひかくすればおｋ
-
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
@@ -10,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
-//追加
 
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
@@ -26,7 +21,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private JButton resetButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
 	private String chara = "";
-	private int guideCount = 1;
+	int guideCount = 0;
 
 	//ポインターのアイコン
 	ImageIcon pointerIcon = new ImageIcon("images/pointer.png");
@@ -39,10 +34,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	ImageIcon myturnIcon = new ImageIcon("images/myturn.png");
 	ImageIcon yourturnIcon = new ImageIcon("images/yourturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
-	
+
 	//ターンカウントの中身
 	JLabel tComment = new JLabel();
-	
+
 	//ログの中身
 	JLabel logComment = new JLabel();
 	JLabel logComment2 = new JLabel();
@@ -149,7 +144,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int theColor = Integer.parseInt(inputTokens[2]);
 							int i = theBnum % 8;
 							int j = theBnum / 8;
-							
+
 							if(myTurn == 3){
 								if(theColor == myColor){
 									//送信元
@@ -184,9 +179,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 								}
 								myTurn = 0;
 							}
-							setTurn();
-							countTurn();
 							movePointer(myIconCount, yourIconCount);
+							endTurn();
+							/*setTurn();
+							countTurn();*/
 
 						} else if(cmd.equals("FLIP")) {
 
@@ -195,7 +191,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int theColor = Integer.parseInt(inputTokens[2]);
 							int i = theBnum % 8;
 							int j = theBnum / 8;
-							
+
 							if(myTurn == 3){
 								if(theColor == myColor){
 									//送信元
@@ -236,19 +232,16 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 						}else if(cmd.equals("PASS")){
 							int theTurn = Integer.parseInt(inputTokens[1]);//myTurn
 							int theColor = Integer.parseInt(inputTokens[2]);//myColor
-							
+
 							//初ターンでパス
 							if(myTurn == 3){
 								myTurn = 1;
-								setTurn();
 							} else if(myTurn == 0){
-								setTurn();
 								myTurn = 1;
 							} else {
-								setTurn();
 								myTurn = 0;
 							}
-							countTurn();
+							endTurn();
 
 						} else if(cmd.equals("RESET")) {
 							//リセットボタンが押されたときの処理
@@ -263,7 +256,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							}
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
-							guideCount = theGuide;
+							guideCount = theGuide; //ガイドの数を両方に適応、共有する
+							System.out.println("guideCount = " + guideCount);
+							
+							//置けなければ勝敗判定
+							if(guideCount == 0){
+								Icon whichTurn = imturnLabel.getIcon();
+								if(whichTurn.equals(myturnIcon)){
+									tComment.setText("あなたの負けです");
+								} else {
+									tComment.setText("あなたの勝ちです");
+								}
+							}
 						}
 					}else{
 						break;
@@ -309,7 +313,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				} else {
 					System.out.println("相手のターンには置けません");
 				}
-				
+
 			} else {
 				//置けない
 			}
@@ -326,7 +330,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				} else {
 					System.out.println("相手のターンにはパスできません");
 				}
-				
+
 		} else if(theIcon.equals(resetIcon)){
 				String msg = "RESET"+ " " + myColor;
 				//サーバに情報を送る
@@ -375,7 +379,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int msgx = x + dx;
 							int theArrayIndex = msgx*8 + msgy;
 							Icon whichTurn = imturnLabel.getIcon();
-							
+
 							//自分のターンのときだけフリップ送信
 							if(whichTurn.equals(myturnIcon)){
 								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
@@ -479,7 +483,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		c.add(mainImLabel);
 		mainImLabel.setBounds(10,10,600,400);
 		mainImLabel.setOpaque(true);
-		
+
 		//ポインターカウント ほかから使うので外で宣言
 		c.add(pointcon);
 		pointcon.setBounds(304,500,30,30);
@@ -498,20 +502,20 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		c.add(barLabel);
 		barLabel.setBounds(10,465,600,50);
 		barLabel.setOpaque(true);
-		
+
 		//ログの中身 ほかでも使うので先頭で定義。
 		//JLabel logComment = new JLabel();
 		c.add(logComment);
 		logComment.setBounds(70,580,510,150);
 		logComment.setText("初期のテキストです。初期のテキストです。");
 		logComment.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
-		
+
 		//JLabel logComment2 = new JLabel();
 		c.add(logComment2);
 		logComment2.setBounds(70,620,510,150);
 		logComment2.setText("初期のテキストです。初期のテキストです。");
 		logComment2.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
-		
+
 		//JLabel logComment3 = new JLabel();
 		c.add(logComment3);
 		logComment3.setBounds(70,660,510,150);
@@ -523,8 +527,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		JLabel logLabel = new JLabel(logIcon);
 		c.add(logLabel);
 		logLabel.setBounds(10,540,600,300);
-		logLabel.setOpaque(true); 
-		
+		logLabel.setOpaque(true);
+
 
 		//パスボタン
 		passButton = new JButton(passIcon);
@@ -532,7 +536,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		passButton.setBounds(620,535,200,60);
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
-		
+
 		//ターンカウントの中身
 		//JLabel tComment = new JLabel();  ほかでも使うので先頭で定義。
 		c.add(tComment);
@@ -540,13 +544,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		tComment.setText("今は" + TurnCount + "ターン目です");
 		tComment.setFont(new Font("MS ゴシック", Font.PLAIN, 20));
 		tComment.setForeground(Color.white);
-		
+
 		//ターンカウントの下地
 		ImageIcon tConIcon = new ImageIcon("images/count.png");
 		JLabel tConBack = new JLabel(tConIcon);
 		c.add(tConBack);
 		tConBack.setBounds(620,605,200,60);
-		tConBack.setOpaque(true); 
+		tConBack.setOpaque(true);
 
 		//resetボタン
 		passButton = new JButton(resetIcon);
@@ -572,27 +576,12 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 	}
 
-	//ターンカウントを増やして、終了判定にもなる
-	public void countTurn(){
-		TurnCount++;
-		tComment.setText("今は" + TurnCount + "ターン目です");
-		tellStory(TurnCount);
-		guide();
-		System.out.println(guideCount);
-		if(guideCount == 0){
-			String msg = "JUDGE" + " " + myColor;
-			out.println(msg);
-			out.flush();
-			repaint();
-		}
-	}
-
 	public void movePointer(int my, int your){
 		//220
 		//countSub = Math.abs(my - your);
 		countSub = my - your;
 		pointerLabel.setLocation(282,420);
-		
+
 		//ラベルの位置は微調整してください
 		if(countSub == 0){
 			pointerLabel.setLocation(282,420);
@@ -631,8 +620,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 		}
 	}
-	
+
 	public void guide(){
+		System.out.println("endTurnが呼ばれた");
 		//初期化
 		guideCount = 0;
 		Icon IconComp;
@@ -661,10 +651,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					}
 				}
 			}
-			
-		} 
+
+		}
 	}
-	
+
 	public void judgeButton2(int y, int x){
 		//System.out.println("judgeButton2が呼ばれました"); //デバック
 		boolean flag = false;
@@ -684,16 +674,16 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			if(flag){
 				//System.out.println("アイコン変えたよ");
 				guideCount++;
-				String msg = "GUIDE" + " " + guideCount;
-				out.println(msg);
-				out.flush();
-				repaint();
 				buttonArray[y][x].setIcon(guideIcon);
 			}
+			String msg = "GUIDE" + " " + guideCount;
+			out.println(msg);
+			out.flush();
+			repaint();
 	}
-	
+
 	public void tellStory(int tCon){
-		
+
 		switch(tCon){
 		case 1:
 			logComment.setText("1ターン目だよ"); //初期設定では一行で20文字です
@@ -707,7 +697,16 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			logComment.setText("3ターン目だよ");
 			break;
 		}
-	}	
+	}
+	
+	public void endTurn(){
+		//System.out.println("endTurnが呼ばれた");
+		setTurn(); //あなたorあいてのターンです（ラベル切り替え）
+		TurnCount++; //ターンカウントを増やす
+		tComment.setText("今は" + TurnCount + "ターン目です"); //ラベルのセット
+		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
+		tellStory(TurnCount);
+	}
 
 
 
