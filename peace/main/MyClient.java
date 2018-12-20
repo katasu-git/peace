@@ -11,7 +11,8 @@ import java.awt.Color;
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
 	private Container c;
-	private ImageIcon blackIcon, whiteIcon, boardIcon, passIcon, resetIcon, guideIcon ;
+	private ImageIcon blackIcon, whiteIcon, boardIcon, 
+			passIcon, resetIcon, guideIcon, redHoodIcon, wolfIcon ;
 	private int myColor;
 	private int myTurn = 3; //myTurn==3のとき初期ターンとする。myTurn==0は黒、1は白。
 	private ImageIcon myIcon, yourIcon;
@@ -45,12 +46,17 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	JLabel logComment3 = new JLabel();
 
 	public MyClient() {
+		
+		/*
 		//名前の入力ダイアログを開く
 		String myName = JOptionPane.showInputDialog(null,"名前を入力してください","名前の入力",JOptionPane.QUESTION_MESSAGE);
 		if(myName.equals("")){
 			myName = "No name";//名前がないときは，"No name"とする
 		}
-
+		*/
+		
+		String myName = "No name";
+		
 		//IPアドレスの入力
 		String myIp = JOptionPane.showInputDialog(null,"IPアドレスを入力してください","IPアドレスの入力",JOptionPane.QUESTION_MESSAGE);
 		if(myIp.equals("")){
@@ -98,7 +104,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				int myNumberInt = Integer.parseInt(myNumberStr);
 
 				c.add(imturnLabel);
-				imturnLabel.setBounds(830,465,200,60);
+				imturnLabel.setBounds(20,700,200,60);
 				imturnLabel.setOpaque(true);
 				imturnLabel.setIcon(yourturnIcon);
 
@@ -107,13 +113,29 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					myIcon = blackIcon;
 					yourIcon = whiteIcon;
 					setTurn();
-
+					
+					/*
 					//あなたのいろ
 					ImageIcon myblackIcon = new ImageIcon("images/myblack.png");
 					JLabel myblackLabel = new JLabel(myblackIcon);
 					c.add(myblackLabel);
 					myblackLabel.setBounds(620,465,200,60);
 					myblackLabel.setOpaque(true);
+					*/
+					
+					//あなたはオオカミ
+					wolfIcon = new ImageIcon("images/wolf_lef_22.png");
+					JLabel wolfLab = new JLabel(wolfIcon);
+					c.add(wolfLab);
+					wolfLab.setBounds(350,500,200,200);
+					//wolfLab.setOpaque(true);
+					
+					//あいてはあかずきん
+					redHoodIcon = new ImageIcon("images/red_rig_22.png");
+					JLabel redHoodLab = new JLabel(redHoodIcon);
+					c.add(redHoodLab);
+					redHoodLab.setBounds(20,500,200,200);
+					//wolfLab.setOpaque(true);
 
 				} else {
 					myColor = 1;
@@ -121,12 +143,28 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = blackIcon;
 					setTurn();
 
+					/*
 					//あなたのいろ
 					ImageIcon mywhiteIcon = new ImageIcon("images/mywhite.png");
 					JLabel mywhiteLabel = new JLabel(mywhiteIcon);
 					c.add(mywhiteLabel);
 					mywhiteLabel.setBounds(620,465,200,60);
 					mywhiteLabel.setOpaque(true);
+					*/
+					
+					//あなたはあかずきん
+					redHoodIcon = new ImageIcon("images/red_lef_22.png");
+					JLabel redHoodLab = new JLabel(redHoodIcon);
+					c.add(redHoodLab);
+					redHoodLab.setBounds(350,500,200,200);
+					//wolfLab.setOpaque(true);
+					
+					//あなたはオオカミ
+					wolfIcon = new ImageIcon("images/wolf_rig_22.png");
+					JLabel wolfLab = new JLabel(wolfIcon);
+					c.add(wolfLab);
+					wolfLab.setBounds(20,500,200,200);
+					//wolfLab.setOpaque(true);
 
 				}
 
@@ -452,9 +490,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		c = getContentPane();//フレームのペインを取得する
 
 		//アイコンの設定
-		whiteIcon = new ImageIcon("images/White.png");
-		blackIcon = new ImageIcon("images/Black.png");
-		boardIcon = new ImageIcon("images/GreenFrame.png");
+		whiteIcon = new ImageIcon("images/redIcon.png");
+		blackIcon = new ImageIcon("images/Black_wolf.png");
+		boardIcon = new ImageIcon("images/boardIcon.png");
 		passIcon = new ImageIcon("images/pass.png");
 		resetIcon = new ImageIcon("images/reset.png");
 		guideIcon = new ImageIcon("images/guideIcon.png");
@@ -484,12 +522,12 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		buttonArray[4][4].setIcon(whiteIcon);
 
 
-		//メインイメージ
+		/*//メインイメージ
 		ImageIcon mainImIcon = new ImageIcon("images/64.jpg");
 		JLabel mainImLabel = new JLabel(mainImIcon);
 		c.add(mainImLabel);
 		mainImLabel.setBounds(10,10,600,400);
-		mainImLabel.setOpaque(true);
+		mainImLabel.setOpaque(true);*/
 
 		//ポインターカウント ほかから使うので外で宣言
 		c.add(pointcon);
@@ -513,41 +551,45 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//ログの中身 ほかでも使うので先頭で定義。
 		//JLabel logComment = new JLabel();
 		c.add(logComment);
-		logComment.setBounds(70,580,510,150);
+		logComment.setBounds(80,-20,600,400);
 		logComment.setText("初期のテキストです。初期のテキストです。");
-		logComment.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
+		logComment.setFont(new Font("MS ゴシック", Font.PLAIN, 21));
+		logComment.setForeground(Color.decode("#FFFFFF"));
+
 
 		//JLabel logComment2 = new JLabel();
 		c.add(logComment2);
-		logComment2.setBounds(70,620,510,150);
+		logComment2.setBounds(80,20,600,400);
 		logComment2.setText("初期のテキストです。初期のテキストです。");
-		logComment2.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
+		logComment2.setFont(new Font("MS ゴシック", Font.PLAIN, 21));
+		logComment2.setForeground(Color.decode("#FFFFFF"));
 
 		//JLabel logComment3 = new JLabel();
 		c.add(logComment3);
-		logComment3.setBounds(70,660,510,150);
+		logComment3.setBounds(80,60,600,400);
 		logComment3.setText("初期のテキストです。初期のテキストです。");
-		logComment3.setFont(new Font("MS ゴシック", Font.PLAIN, 24));
+		logComment3.setFont(new Font("MS ゴシック", Font.PLAIN, 21));
+		logComment3.setForeground(Color.decode("#FFFFFF"));
 
 		//ログ
 		ImageIcon logIcon = new ImageIcon("images/63.png");
 		JLabel logLabel = new JLabel(logIcon);
 		c.add(logLabel);
-		logLabel.setBounds(10,540,600,300);
+		logLabel.setBounds(10,0,600,400);
 		//logLabel.setOpaque(true);
 
 
 		//パスボタン
 		passButton = new JButton(passIcon);
 		c.add(passButton);
-		passButton.setBounds(620,535,200,60);
+		passButton.setBounds(620,435,200,60);
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
 
 		//ターンカウントの中身
 		//JLabel tComment = new JLabel();  ほかでも使うので先頭で定義。
 		c.add(tComment);
-		tComment.setBounds(630,605,200,60);
+		tComment.setBounds(630,505,200,60);
 		tComment.setText("今は" + TurnCount + "ターン目です");
 		tComment.setFont(new Font("MS ゴシック", Font.PLAIN, 20));
 		tComment.setForeground(Color.white);
@@ -556,13 +598,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		ImageIcon tConIcon = new ImageIcon("images/count.png");
 		JLabel tConBack = new JLabel(tConIcon);
 		c.add(tConBack);
-		tConBack.setBounds(620,605,200,60);
+		tConBack.setBounds(620,505,200,60);
 		tConBack.setOpaque(true);
 
 		//resetボタン
 		passButton = new JButton(resetIcon);
 		c.add(passButton);
-		passButton.setBounds(830,535,200,60);
+		passButton.setBounds(830,435,200,60);
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
 
@@ -611,10 +653,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		if(myTurn == 3){
 			if(myIcon.equals(blackIcon)){
 				imturnLabel.setIcon(myturnIcon);
+				//あなたのアイコンのすぐ下に
+				imturnLabel.setBounds(350,700,200,60);
 				//初回のガイド表示
 				guide();
 			} else {
 				imturnLabel.setIcon(yourturnIcon);
+				imturnLabel.setBounds(20,700,200,60);
 			}
 		} else {
 			//二回目以降の処理
@@ -622,8 +667,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			System.out.println(whichTurn);
 			if(whichTurn.equals(myturnIcon)){
 				imturnLabel.setIcon(yourturnIcon);
+				imturnLabel.setBounds(20,700,200,60);
 			} else {
 				imturnLabel.setIcon(myturnIcon);
+				imturnLabel.setBounds(350,700,200,60);
 			}
 		}
 	}
@@ -694,15 +741,51 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		switch(tCon){
 		case 1:
-			logComment.setText("1ターン目だよ"); //初期設定では一行で20文字です
-			logComment2.setText("");
+			logComment.setText("むかし、それまでに誰も見たことがない"); //初期設定では一行で20文字です
+			logComment2.setText("ほどきれいな、女の子がいました。");
 			logComment3.setText("");
 			break;
 		case 2:
-			logComment.setText("2ターン目だよ");
+			logComment.setText("この子に夢中なおばあさんが赤いずきんを");
+			logComment2.setText("作らせましたが、それがよく似合ったので");
+			logComment3.setText("どこへ行っても「赤ずきんちゃん」と呼ばれました。");
 			break;
 		case 3:
-			logComment.setText("3ターン目だよ");
+			logComment.setText("ある日、母親は女の子にいいました。");
+			logComment2.setText("「おばあさんが病気だそうだから、どんな具合か");
+			logComment3.setText("見ておいで。このガレットとバターの壺をもってね」");
+			break;
+		case 4:
+			logComment.setText("赤ずきんちゃんは別の村に住むおばあさんの");
+			logComment2.setText("所へ向かって、すぐに出かけました。");
+			logComment3.setText("");
+			break;
+		//ここから分岐
+		case 5:
+			if(myIcon == whiteIcon){
+				//赤ずきん視点
+				logComment.setText("あなたが森を少し歩いていると、");
+				logComment2.setText("おおかみが声をかけてきました。");
+				logComment3.setText("");
+			}else {
+				//おおかみ視点
+				logComment.setText("いつものように「えさ」を探していると");
+				logComment2.setText("赤いずきんをかぶった女の子を見つけました。");
+				logComment3.setText("あなたは声をかけることにしました。");
+			}
+			break;
+		case 6:
+			if(myIcon == whiteIcon){
+				//赤ずきん視点
+				logComment.setText("「どこへ行くの？」");
+				logComment2.setText("「おばあさんのおうちはどこ？」");
+				logComment3.setText("");
+			}else {
+				//おおかみ視点
+				logComment.setText("「どこへ行くの？」");
+				logComment2.setText("「おばあさんのおうちはどこ？」");
+				logComment3.setText("");
+			}
 			break;
 		}
 	}
