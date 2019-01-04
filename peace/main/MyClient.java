@@ -22,7 +22,7 @@ import java.util.TimerTask;
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
 	private Container c;
-	private ImageIcon whiteIcon, redIcon, boardIcon,
+	private ImageIcon whiteIcon, redIcon, boardIcon,pactiveIcon,
 			passIcon, resetIcon, guideIcon, redHoodIcon, wolfIcon, wmicon, rmicon;
 	private int myColor;
 	private int myTurn = 3; //myTurn==3のとき初期ターンとする。myTurn==0は黒、1は白。
@@ -30,8 +30,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private int flipNum = 0;
 	private int TurnCount = 0;
 	PrintWriter out;//出力用のライター
-	private JButton passButton;
-	private JButton resetButton;
+	private JButton passButton, resetButton, pactiveButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
 	private String chara = "";
 	int guideCount = 0;
@@ -431,16 +430,34 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		Icon theIcon = theButton.getIcon();//theIconには，現在のボタンに設定されたアイコンが入る
 
 		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon) || theIcon.equals(redIcon) ||theIcon.equals(whiteIcon)){
+
 		///////////////////////////////////////////////////////////////////////
 		theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
 		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
 		theSoundPlayer1.play();
+
 		///////////////////////////////////////////////////////////////////////
+		} else	if (theIcon.equals(passIcon)){
+			//passIcon = new ImageIcon("icons/pass-active.png");
+			//System.out.println("入った");
+			passButton.setVisible(false);
+			pactiveButton.setVisible(true);
 		}
 	}
 
 	public void mouseExited(MouseEvent e) {//マウスがオブジェクトから出たときの処理
 		//System.out.println("マウス脱出");
+
+		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．型が違うのでキャストする
+		Icon theIcon = theButton.getIcon();//theIconには，現在のボタンに設定されたアイコンが入る
+
+		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon) || theIcon.equals(redIcon) ||theIcon.equals(whiteIcon)){
+
+		} else	if (theIcon.equals(pactiveIcon)){
+			//System.out.println("出た");
+			passButton.setVisible(true);
+			pactiveButton.setVisible(false);
+		}
 	}
 
 	public void mousePressed(MouseEvent e) {//マウスでオブジェクトを押したときの処理（クリックとの違いに注意）
@@ -560,6 +577,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		whiteIcon = new ImageIcon("icons/w-icon.png");
 		boardIcon = new ImageIcon("icons/b-icon.png");
 		passIcon = new ImageIcon("icons/pass.png");
+		pactiveIcon = new ImageIcon("icons/pactive.png");
 		resetIcon = new ImageIcon("icons/reset.png");
 		guideIcon = new ImageIcon("icons/g-icon.png");
 
@@ -649,7 +667,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
 		passButton.setContentAreaFilled(false);
-		//passButton.setBorderPainted(false);
+		passButton.setBorderPainted(false);
+		//passButton.setVisible(false);
+
+		//パスボタン
+		pactiveButton = new JButton(pactiveIcon);
+		c.add(pactiveButton);
+		pactiveButton.setBounds(550,390,100,100);
+		pactiveButton.setOpaque(true);
+		pactiveButton.addMouseListener(this);
+		pactiveButton.setContentAreaFilled(false);
+		pactiveButton.setBorderPainted(false);
+		pactiveButton.setVisible(false);
 
 		//resetボタン
 		resetButton = new JButton(resetIcon);
@@ -696,7 +725,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	public void movePointer(int my, int your){
 
 		countSub = my - your; //自分が多いと＋
-		//System.out.println("///////countsub = ////////" + countSub);
+		System.out.println("///////countsub = ////////" + countSub);
 
 		//移送距離は 基準値 + 差分*9
 		int des = (165 - countSub*9);
@@ -718,6 +747,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				if ( cnt >= 9 ) timer.cancel();
 			}
 		};
+		//初期ディレイとインターバル
 		timer.schedule(task, 0, 20);
 
 		if(countSub == 0){
