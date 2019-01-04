@@ -7,8 +7,17 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.Color;
-import java.applet.AudioClip;
-import java.applet.Applet;
+
+import java.io.File;//音楽再生時に必要
+import javax.sound.sampled.AudioFormat;//音楽再生時に必要
+import javax.sound.sampled.AudioSystem;//音楽再生時に必要
+import javax.sound.sampled.Clip;//音楽再生時に必要
+import javax.sound.sampled.DataLine;//音楽再生時に必要
+
+//タイマー
+import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
@@ -26,6 +35,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
 	private String chara = "";
 	int guideCount = 0;
+	SoundPlayer theSoundPlayer1;//どこからでもアクセスできるように，クラスのメンバとして宣言
 
 	//ポインターのアイコン
 	ImageIcon pointerIcon = new ImageIcon("icons/arrow.png");
@@ -345,10 +355,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．型が違うのでキャストする
 		Icon theIcon = theButton.getIcon();//theIconには，現在のボタンに設定されたアイコンが入る
 
-		//if(theButton.getText().equals("PASS")){
-		//	System.out.println("PURESS THE PASS BUTOON");
-		//}
-
 		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon)){
 			String theArrayIndex = theButton.getActionCommand();//ボタンの配列の番号を取り出す
 			int temp = Integer.parseInt(theArrayIndex);
@@ -391,14 +397,46 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.println(msg);
 				out.flush();
 				repaint();*/
-				//AudioClip SE1;
-				//AudioClip SE1=getAudioClip(getDocumentBase(), "sounds/pok.mp3"); //ファイル読み込み
-				//SE1.play(); //一回再生
+
+				////////////////サウンドのテスト/////////////////////////////////////////
+				theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
+				theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
+				theSoundPlayer1.play();
+				///////////////////////////////////////////////////////////////////////
+
+				///////////timerのテスト////////////////////////////////////////////////
+				Timer timer = new Timer(false);
+				TimerTask task = new TimerTask() {
+
+					int cnt=0;
+
+					@Override
+					public void run() {
+						System.out.println("てすと");
+						cnt++;
+						//5回実行で停止
+						if ( cnt >= 5 ) timer.cancel();
+					}
+				};
+				timer.schedule(task, 0, 1000);
+				////////////////////////////////////////////////////////////////////////
+
 		}
 	}
 
 	public void mouseEntered(MouseEvent e) {//マウスがオブジェクトに入ったときの処理
 		//System.out.println("マウスが入った");
+
+		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．型が違うのでキャストする
+		Icon theIcon = theButton.getIcon();//theIconには，現在のボタンに設定されたアイコンが入る
+
+		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon) || theIcon.equals(redIcon) ||theIcon.equals(whiteIcon)){
+		///////////////////////////////////////////////////////////////////////
+		theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
+		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
+		theSoundPlayer1.play();
+		///////////////////////////////////////////////////////////////////////
+		}
 	}
 
 	public void mouseExited(MouseEvent e) {//マウスがオブジェクトから出たときの処理
@@ -552,7 +590,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//ポインターカウント ほかから使うので外で宣言
 		c.add(pointcon);
 		pointcon.setBounds(398,180,30,30);
-		pointcon.setText(Integer.toString(countSub));
+		pointcon.setText(" " + Integer.toString(countSub));
 		pointcon.setForeground(Color.decode("#c0bfbf"));
 		//pointcon.setOpaque(true); //背景透明化
 		pointcon.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 18));
@@ -656,26 +694,41 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void movePointer(int my, int your){
-		//220
-		//countSub = Math.abs(my - your);
-		countSub = my - your;
-		//初期化
-		pointerLabel.setLocation(360-40+13,200-70+35);
 
-		//ラベルの位置は微調整してください
+		countSub = my - your; //自分が多いと＋
+		//System.out.println("///////countsub = ////////" + countSub);
+
+		//移送距離は 基準値 + 差分*9
+		int des = (165 - countSub*9);
+		//System.out.println("///////des = ////////" + des);
+		int dif = (pointerLabel.getY() - des) / 9;
+		//System.out.println("///////dif = ////////" + dif);
+
+		Timer timer = new Timer(false);
+		TimerTask task = new TimerTask() {
+
+			int cnt=0;
+
+			@Override
+			public void run() {
+				pointerLabel.setLocation(333, pointerLabel.getY() - dif );
+				pointcon.setLocation(398, pointcon.getY() - dif );
+				cnt++;
+				//5回実行で停止
+				if ( cnt >= 9 ) timer.cancel();
+			}
+		};
+		timer.schedule(task, 0, 20);
+
 		if(countSub == 0){
 			pointcon.setText(" " + Integer.toString(countSub));
-			pointcon.setLocation(398,180);
 		} else if (countSub > 0){
-			pointerLabel.setLocation(360-40+13,200-70+35 - countSub*9);
 			pointcon.setText("+" + Integer.toString(countSub));
-			pointcon.setLocation(398,180 - countSub*9);
 		} else {
-			pointerLabel.setLocation(360-40+13,200-70+35 - countSub*9);
 			pointcon.setText(Integer.toString(countSub));
-			pointcon.setLocation(398,180 - countSub*9);
 		}
 		repaint();
+
 	}
 
 	public void setTurn(){
@@ -843,5 +896,72 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		}
 	}
 
+	public class SoundPlayer{
+			private AudioFormat format = null;
+			private DataLine.Info info = null;
+			private Clip clip = null;
+			boolean stopFlag = false;
+			Thread soundThread = null;
+			private boolean loopFlag = false;
+
+			public SoundPlayer(String pathname){
+					File file = new File(pathname);
+					try{
+							format = AudioSystem.getAudioFileFormat(file).getFormat();
+							info = new DataLine.Info(Clip.class, format);
+							clip = (Clip) AudioSystem.getLine(info);
+							clip.open(AudioSystem.getAudioInputStream(file));
+							//clip.setLoopPoints(0,clip.getFrameLength());//無限ループとなる
+					}catch(Exception e){
+							e.printStackTrace();
+					}
+			}
+
+			public void SetLoop(boolean flag){
+					loopFlag = flag;
+			}
+
+			public void play(){
+					soundThread = new Thread(){
+							public void run(){
+									long time = (long)clip.getFrameLength();//44100で割ると再生時間（秒）がでる
+									//System.out.println("PlaySound time="+time);
+									long endTime = System.currentTimeMillis()+time*1000/44100;
+									clip.start();
+									//System.out.println("PlaySound time="+(int)(time/44100));
+									while(true){
+											if(stopFlag){//stopFlagがtrueになった終了
+													System.out.println("PlaySound stop by stopFlag");
+													clip.stop();
+													return;
+											}
+											//System.out.println("endTime="+endTime);
+											//System.out.println("currentTimeMillis="+System.currentTimeMillis());
+											if(endTime < System.currentTimeMillis()){//曲の長さを過ぎたら終了
+													//System.out.println("PlaySound stop by sound length");
+													if(loopFlag) {
+															clip.loop(1);//無限ループとなる
+													} else {
+															clip.stop();
+															return;
+													}
+											}
+											try {
+													Thread.sleep(100);
+											} catch (InterruptedException e) {
+													e.printStackTrace();
+											}
+									}
+							}
+					};
+					soundThread.start();
+			}
+
+			public void stop(){
+					stopFlag = true;
+					//System.out.println("StopSound");
+			}
+
+	}
 
 }
