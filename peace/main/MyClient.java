@@ -7,81 +7,87 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.Color;
+import java.applet.AudioClip;
+import java.applet.Applet;
 
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
-	private JButton buttonArray[][];//ƒ{ƒ^ƒ“—p‚Ì”z—ñ
+	private JButton buttonArray[][];//ãƒœã‚¿ãƒ³ç”¨ã®é…åˆ—
 	private Container c;
 	private ImageIcon whiteIcon, redIcon, boardIcon,
 			passIcon, resetIcon, guideIcon, redHoodIcon, wolfIcon, wmicon, rmicon;
 	private int myColor;
-	private int myTurn = 3; //myTurn==3‚Ì‚Æ‚«‰Šúƒ^[ƒ“‚Æ‚·‚éBmyTurn==0‚Í•A1‚Í”’B
+	private int myTurn = 3; //myTurn==3ã®ã¨ãåˆæœŸã‚¿ãƒ¼ãƒ³ã¨ã™ã‚‹ã€‚myTurn==0ã¯é»’ã€1ã¯ç™½ã€‚
 	private ImageIcon myIcon, yourIcon;
 	private int flipNum = 0;
 	private int TurnCount = 0;
-	PrintWriter out;//o—Í—p‚Ìƒ‰ƒCƒ^[
+	PrintWriter out;//å‡ºåŠ›ç”¨ã®ãƒ©ã‚¤ã‚¿ãƒ¼
 	private JButton passButton;
 	private JButton resetButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
 	private String chara = "";
 	int guideCount = 0;
 
-	//ƒ|ƒCƒ“ƒ^[‚ÌƒAƒCƒRƒ“
+	//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã®ã‚¢ã‚¤ã‚³ãƒ³
 	ImageIcon pointerIcon = new ImageIcon("icons/arrow.png");
 	JLabel pointerLabel = new JLabel(pointerIcon);
 
-	//ƒ|ƒCƒ“ƒ^[‚ÌƒJƒEƒ“ƒg
+	//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã®ã‚«ã‚¦ãƒ³ãƒˆ
 	JLabel pointcon = new JLabel();
 
-	//ƒ^[ƒ“‚ğ¦‚·ƒAƒCƒRƒ“
+	//ã‚¿ãƒ¼ãƒ³ã‚’ç¤ºã™ã‚¢ã‚¤ã‚³ãƒ³
 	ImageIcon myturnIcon = new ImageIcon("icons/yourturn.png");
 	ImageIcon yourturnIcon = new ImageIcon("icons/rivalturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
 
-	//ƒ^[ƒ“ƒJƒEƒ“ƒg‚Ì’†g
+	//ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®ä¸­èº«
 	JLabel tComment = new JLabel();
 
-	//ƒƒO‚Ì’†g
-	JLabel logComment = new JLabel();
-	JLabel logComment2 = new JLabel();
-	JLabel logComment3 = new JLabel();
+	//ãƒ­ã‚°ã®ä¸­èº«
+	JLabel strow1 = new JLabel();
+	JLabel strow2 = new JLabel();
+	JLabel strow3 = new JLabel();
+	JLabel strow4 = new JLabel();
+
+	JLabel comrow1 = new JLabel();
+	JLabel comrow2 = new JLabel();
 
 	public MyClient() {
 
 		/*
-		//–¼‘O‚Ì“ü—Íƒ_ƒCƒAƒƒO‚ğŠJ‚­
-		String myName = JOptionPane.showInputDialog(null,"–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢","–¼‘O‚Ì“ü—Í",JOptionPane.QUESTION_MESSAGE);
+		//åå‰ã®å…¥åŠ›ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ã
+		String myName = JOptionPane.showInputDialog(null,"åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„","åå‰ã®å…¥åŠ›",JOptionPane.QUESTION_MESSAGE);
 		if(myName.equals("")){
-			myName = "No name";//–¼‘O‚ª‚È‚¢‚Æ‚«‚ÍC"No name"‚Æ‚·‚é
+			myName = "No name";//åå‰ãŒãªã„ã¨ãã¯ï¼Œ"No name"ã¨ã™ã‚‹
 		}
 		*/
 
 		String myName = "No name";
 
-		//IPƒAƒhƒŒƒX‚Ì“ü—Í
-		String myIp = JOptionPane.showInputDialog(null,"IPƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢","IPƒAƒhƒŒƒX‚Ì“ü—Í",JOptionPane.QUESTION_MESSAGE);
+		//IPã‚¢ãƒ‰ãƒ¬ã‚¹ã®å…¥åŠ›
+		String myIp = JOptionPane.showInputDialog(null,"IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„","IPã‚¢ãƒ‰ãƒ¬ã‚¹ã®å…¥åŠ›",JOptionPane.QUESTION_MESSAGE);
 		if(myIp.equals("")){
-			myIp = "localhost";//‚È‚¢‚Æ‚«‚ÍClocalhost‚Æ‚·‚é
+			myIp = "localhost";//ãªã„ã¨ãã¯ï¼Œlocalhostã¨ã™ã‚‹
 		}
 
 		setUp();
 
-		//ƒT[ƒo‚ÉÚ‘±‚·‚é
+		//ã‚µãƒ¼ãƒã«æ¥ç¶šã™ã‚‹
 		Socket socket = null;
 		try {
-			//"localhost"‚ÍC©•ª“à•”‚Ö‚ÌÚ‘±Dlocalhost‚ğÚ‘±æ‚ÌIP Addressi"133.42.155.201"Œ`®j‚Éİ’è‚·‚é‚Æ‘¼‚ÌPC‚ÌƒT[ƒo‚Æ’ÊM‚Å‚«‚é
-			//10000‚Íƒ|[ƒg”Ô†DIP Address‚ÅÚ‘±‚·‚éPC‚ğŒˆ‚ß‚ÄCƒ|[ƒg”Ô†‚Å‚»‚ÌPCã“®ì‚·‚éƒvƒƒOƒ‰ƒ€‚ğ“Á’è‚·‚é
+			//"localhost"ã¯ï¼Œè‡ªåˆ†å†…éƒ¨ã¸ã®æ¥ç¶šï¼localhostã‚’æ¥ç¶šå…ˆã®IP Addressï¼ˆ"133.42.155.201"å½¢å¼ï¼‰ã«è¨­å®šã™ã‚‹ã¨ä»–ã®PCã®ã‚µãƒ¼ãƒã¨é€šä¿¡ã§ãã‚‹
+			//10000ã¯ãƒãƒ¼ãƒˆç•ªå·ï¼IP Addressã§æ¥ç¶šã™ã‚‹PCã‚’æ±ºã‚ã¦ï¼Œãƒãƒ¼ãƒˆç•ªå·ã§ãã®PCä¸Šå‹•ä½œã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ç‰¹å®šã™ã‚‹
 			socket = new Socket(myIp, 10000);
 		} catch (UnknownHostException e) {
-			System.err.println("ƒzƒXƒg‚Ì IP ƒAƒhƒŒƒX‚ª”»’è‚Å‚«‚Ü‚¹‚ñ: " + e);
+			System.err.println("ãƒ›ã‚¹ãƒˆã® IP ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒåˆ¤å®šã§ãã¾ã›ã‚“: " + e);
 		} catch (IOException e) {
-			System.err.println("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
+			System.err.println("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
 		}
 
-		MesgRecvThread mrt = new MesgRecvThread(socket, myName);//óM—p‚ÌƒXƒŒƒbƒh‚ğì¬‚·‚é
-		mrt.start();//ƒXƒŒƒbƒh‚ğ“®‚©‚·iRun‚ª“®‚­j
+		MesgRecvThread mrt = new MesgRecvThread(socket, myName);//å—ä¿¡ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ä½œæˆã™ã‚‹
+		mrt.start();//ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å‹•ã‹ã™ï¼ˆRunãŒå‹•ãï¼‰
 	}
 
-	//ƒƒbƒZ[ƒWóM‚Ì‚½‚ß‚ÌƒXƒŒƒbƒh
+	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ã®ãŸã‚ã®ã‚¹ãƒ¬ãƒƒãƒ‰
 	public class MesgRecvThread extends Thread {
 
 		Socket socket;
@@ -92,13 +98,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			myName = n;
 		}
 
-		//’ÊMó‹µ‚ğŠÄ‹‚µCóMƒf[ƒ^‚É‚æ‚Á‚Ä“®ì‚·‚é
+		//é€šä¿¡çŠ¶æ³ã‚’ç›£è¦–ã—ï¼Œå—ä¿¡ãƒ‡ãƒ¼ã‚¿ã«ã‚ˆã£ã¦å‹•ä½œã™ã‚‹
 		public void run() {
 			try{
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
-				out.println(myName);//Ú‘±‚ÌÅ‰‚É–¼‘O‚ğ‘—‚é
+				out.println(myName);//æ¥ç¶šã®æœ€åˆã«åå‰ã‚’é€ã‚‹
 
 				String myNumberStr = br.readLine();
 				int myNumberInt = Integer.parseInt(myNumberStr);
@@ -114,28 +120,28 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = redIcon;
 					setTurn();
 
-					////////////////////////////////////‚ ‚È‚½‚ÍƒIƒIƒJƒ~///////////////////
+					////////////////////////////////////ã‚ãªãŸã¯ã‚ªã‚ªã‚«ãƒŸ///////////////////
 					wolfIcon = new ImageIcon("icons/wolf.png");
 					JLabel wolfLab = new JLabel(wolfIcon);
 					c.add(wolfLab);
 					wolfLab.setBounds(180,410,125,125);
 					//wolfLab.setOpaque(true);
 
-					//¬‚³‚¢ƒAƒCƒRƒ“
+					//å°ã•ã„ã‚¢ã‚¤ã‚³ãƒ³
 					wmicon = new ImageIcon("icons/wolf-mini.png");
 					JLabel wolfminiLab = new JLabel(wmicon);
 					c.add(wolfminiLab);
 					wolfminiLab.setBounds(365,10,50,50);
 					//wolfLab.setOpaque(true);
 
-					//‚ ‚¢‚Ä‚Í‚ ‚©‚¸‚«‚ñ
+					//ã‚ã„ã¦ã¯ã‚ã‹ãšãã‚“
 					redHoodIcon = new ImageIcon("icons/redhood.png");
 					JLabel redHoodLab = new JLabel(redHoodIcon);
 					c.add(redHoodLab);
 					redHoodLab.setBounds(30,410,125,125);
 					//redHoodLab.setOpaque(true);
 
-					//¬‚³‚¢ƒAƒCƒRƒ“
+					//å°ã•ã„ã‚¢ã‚¤ã‚³ãƒ³
 					rmicon = new ImageIcon("icons/redhood-mini.png");
 					JLabel redminilab = new JLabel(rmicon);
 					c.add(redminilab);
@@ -148,28 +154,28 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = whiteIcon;
 					setTurn();
 
-					//‚ ‚È‚½‚Í‚ ‚©‚¸‚«‚ñ
+					//ã‚ãªãŸã¯ã‚ã‹ãšãã‚“
 					redHoodIcon = new ImageIcon("icons/redhood.png");
 					JLabel redHoodLab = new JLabel(redHoodIcon);
 					c.add(redHoodLab);
 					redHoodLab.setBounds(180,410,125,125);
 					//redHoodLab.setOpaque(true);
 
-					//¬‚³‚¢ƒAƒCƒRƒ“
+					//å°ã•ã„ã‚¢ã‚¤ã‚³ãƒ³
 					rmicon = new ImageIcon("icons/redhood-mini.png");
 					JLabel redminilab = new JLabel(rmicon);
 					c.add(redminilab);
 					redminilab.setBounds(365,10,50,50);
 					//wolfLab.setOpaque(true);
 
-					//‚ ‚È‚½‚ÍƒIƒIƒJƒ~
+					//ã‚ãªãŸã¯ã‚ªã‚ªã‚«ãƒŸ
 					wolfIcon = new ImageIcon("icons/wolf.png");
 					JLabel wolfLab = new JLabel(wolfIcon);
 					c.add(wolfLab);
 					wolfLab.setBounds(30,410,125,125);
 					//wolfLab.setOpaque(true);
 
-					//¬‚³‚¢ƒAƒCƒRƒ“
+					//å°ã•ã„ã‚¢ã‚¤ã‚³ãƒ³
 					wmicon = new ImageIcon("icons/wolf-mini.png");
 					JLabel wolfminiLab = new JLabel(wmicon);
 					c.add(wolfminiLab);
@@ -179,7 +185,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//////////////////////////////////////////////////////////////////////
 
 				}
-				//”wŒi‰æ‘œ‚ÍÅŒã‚É’è‹`‚·‚é
+				//èƒŒæ™¯ç”»åƒã¯æœ€å¾Œã«å®šç¾©ã™ã‚‹
 				ImageIcon mainImIcon = new ImageIcon("icons/main-frame.jpg");
 				JLabel mainImLabel = new JLabel(mainImIcon);
 				c.add(mainImLabel);
@@ -187,13 +193,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				//mainImLabel.setOpaque(true);
 
 				while(true) {
-					String inputLine = br.readLine();//ƒf[ƒ^‚ğˆês•ª‚¾‚¯“Ç‚İ‚ñ‚Å‚İ‚é
-					if (inputLine != null) {//“Ç‚İ‚ñ‚¾‚Æ‚«‚Éƒf[ƒ^‚ª“Ç‚İ‚Ü‚ê‚½‚©‚Ç‚¤‚©‚ğƒ`ƒFƒbƒN‚·‚é
-						System.out.println(inputLine);//ƒfƒoƒbƒOi“®ìŠm”F—pj‚ÉƒRƒ“ƒ\[ƒ‹‚Éo—Í‚·‚é
-						String[] inputTokens = inputLine.split(" ");	//“ü—Íƒf[ƒ^‚ğ‰ğÍ‚·‚é‚½‚ß‚ÉAƒXƒy[ƒX‚ÅØ‚è•ª‚¯‚é
-						String cmd = inputTokens[0];//ƒRƒ}ƒ“ƒh‚Ìæ‚èo‚µD‚P‚Â–Ú‚Ì—v‘f‚ğæ‚èo‚·
+					String inputLine = br.readLine();//ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€è¡Œåˆ†ã ã‘èª­ã¿è¾¼ã‚“ã§ã¿ã‚‹
+					if (inputLine != null) {//èª­ã¿è¾¼ã‚“ã ã¨ãã«ãƒ‡ãƒ¼ã‚¿ãŒèª­ã¿è¾¼ã¾ã‚ŒãŸã‹ã©ã†ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+						System.out.println(inputLine);//ãƒ‡ãƒãƒƒã‚°ï¼ˆå‹•ä½œç¢ºèªç”¨ï¼‰ã«ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«å‡ºåŠ›ã™ã‚‹
+						String[] inputTokens = inputLine.split(" ");	//å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ã‚’è§£æã™ã‚‹ãŸã‚ã«ã€ã‚¹ãƒšãƒ¼ã‚¹ã§åˆ‡ã‚Šåˆ†ã‘ã‚‹
+						String cmd = inputTokens[0];//ã‚³ãƒãƒ³ãƒ‰ã®å–ã‚Šå‡ºã—ï¼ï¼‘ã¤ç›®ã®è¦ç´ ã‚’å–ã‚Šå‡ºã™
 						if(cmd.equals("MOVE")){
-							//•K—v‚Ì‚È‚¢ˆ—
+							//å¿…è¦ã®ãªã„å‡¦ç†
 						} else if(cmd.equals("PLACE")) {
 
 							String theBName = inputTokens[1];
@@ -204,39 +210,39 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 							if(myTurn == 3){
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									buttonArray[i][j].setIcon(myIcon);
-									myIconCount++; //©•ª‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+									myIconCount++; //è‡ªåˆ†ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
 								} else {
-									//‘—Mæ
+									//é€ä¿¡å…ˆ
 									buttonArray[i][j].setIcon(yourIcon);
-									yourIconCount++; //‘Šè‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+									yourIconCount++; //ç›¸æ‰‹ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
 								}
 								myTurn = 1;
 							} else if(myTurn == 0){
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									buttonArray[i][j].setIcon(myIcon);
-									myIconCount++; //©•ª‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+									myIconCount++; //è‡ªåˆ†ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
 								} else {
-									//‘—Mæ
+									//é€ä¿¡å…ˆ
 									buttonArray[i][j].setIcon(yourIcon);
-									yourIconCount++; //‘Šè‚ÌƒJƒEƒ“ƒg‚ğ‘‚â‚·
+									yourIconCount++; //ç›¸æ‰‹ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
 								}
 								myTurn = 1;
 							} else {
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									buttonArray[i][j].setIcon(myIcon);
 									myIconCount++;
 								} else {
-									//‘—MæƒNƒ‰ƒCƒAƒ“ƒg‚Å‚Ìˆ—
+									//é€ä¿¡å…ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§ã®å‡¦ç†
 									buttonArray[i][j].setIcon(yourIcon);
 									yourIconCount++;
 								}
 								myTurn = 0;
 							}
-							movePointer(myIconCount, yourIconCount); //‘Šè‚Æ‚Ì·‚ğZo
+							movePointer(myIconCount, yourIconCount); //ç›¸æ‰‹ã¨ã®å·®ã‚’ç®—å‡º
 							endTurn();
 
 						} else if(cmd.equals("FLIP")) {
@@ -249,36 +255,36 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 							if(myTurn == 3){
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									myIconCount++;
 									yourIconCount--;
 									buttonArray[i][j].setIcon(myIcon);
 								} else {
-									//‘—Mæ
+									//é€ä¿¡å…ˆ
 									yourIconCount++;
 									myIconCount--;
 									buttonArray[i][j].setIcon(yourIcon);
 								}
 							} else if(myTurn == 0){
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									myIconCount++;
 									yourIconCount--;
 									buttonArray[i][j].setIcon(myIcon);
 								} else {
-									//‘—Mæ
+									//é€ä¿¡å…ˆ
 									yourIconCount++;
 									myIconCount--;
 									buttonArray[i][j].setIcon(yourIcon);
 								}
 							} else {
 								if(theColor == myColor){
-									//‘—MŒ³
+									//é€ä¿¡å…ƒ
 									myIconCount++;
 									yourIconCount--;
 									buttonArray[i][j].setIcon(myIcon);
 								} else {
-									//‘—Mæ
+									//é€ä¿¡å…ˆ
 									yourIconCount++;
 									myIconCount--;
 									buttonArray[i][j].setIcon(yourIcon);
@@ -288,7 +294,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int theTurn = Integer.parseInt(inputTokens[1]);//myTurn
 							int theColor = Integer.parseInt(inputTokens[2]);//myColor
 
-							//‰ƒ^[ƒ“‚ÅƒpƒX
+							//åˆã‚¿ãƒ¼ãƒ³ã§ãƒ‘ã‚¹
 							if(myTurn == 3){
 								myTurn = 1;
 							} else if(myTurn == 0){
@@ -299,22 +305,22 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							endTurn();
 
 						} else if(cmd.equals("RESET")) {
-							//ƒŠƒZƒbƒgƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«‚Ìˆ—
+							//ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ãã®å‡¦ç†
 						} else if(cmd.equals("JUDGE")){
 							int theColor = Integer.parseInt(inputTokens[1]);//myColor
 							if(theColor == myColor){
-								//System.out.println("‚ ‚È‚½‚Ì•‰‚¯‚Å‚·");
-								tComment.setText("‚ ‚È‚½‚Ì•‰‚¯‚Å‚·");
+								//System.out.println("ã‚ãªãŸã®è² ã‘ã§ã™");
+								tComment.setText("ã‚ãªãŸã®è² ã‘ã§ã™");
 							} else {
-								//System.out.println("‚ ‚È‚½‚ÌŸ‚¿‚Å‚·");
-								tComment.setText("‚ ‚È‚½‚ÌŸ‚¿‚Å‚·");
+								//System.out.println("ã‚ãªãŸã®å‹ã¡ã§ã™");
+								tComment.setText("ã‚ãªãŸã®å‹ã¡ã§ã™");
 							}
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
-							guideCount = theGuide; //ƒKƒCƒh‚Ì”‚ğ—¼•û‚É“K‰A‹¤—L‚·‚é
+							guideCount = theGuide; //ã‚¬ã‚¤ãƒ‰ã®æ•°ã‚’ä¸¡æ–¹ã«é©å¿œã€å…±æœ‰ã™ã‚‹
 							//System.out.println("guideCount = " + guideCount);
 
-							//’u‚¯‚È‚¯‚ê‚ÎŸ”s”»’è
+							//ç½®ã‘ãªã‘ã‚Œã°å‹æ•—åˆ¤å®š
 							whichWin();
 						}
 					}else{
@@ -324,7 +330,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 				socket.close();
 			} catch (IOException e) {
-				System.err.println("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: " + e);
+				System.err.println("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: " + e);
 			}
 		}
 	}
@@ -334,112 +340,115 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		net.setVisible(true);
 	}
 
-	public void mouseClicked(MouseEvent e) {//ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Ìˆ—
-		System.out.println("ƒNƒŠƒbƒN‚µ‚Ü‚µ‚½"); //ƒfƒoƒbƒN
-		JButton theButton = (JButton)e.getComponent();//ƒNƒŠƒbƒN‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ“¾‚éDŒ^‚ªˆá‚¤‚Ì‚ÅƒLƒƒƒXƒg‚·‚é
-		Icon theIcon = theButton.getIcon();//theIcon‚É‚ÍCŒ»İ‚Ìƒ{ƒ^ƒ“‚Éİ’è‚³‚ê‚½ƒAƒCƒRƒ“‚ª“ü‚é
+	public void mouseClicked(MouseEvent e) {//ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã®å‡¦ç†
+		System.out.println("ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
+		JButton theButton = (JButton)e.getComponent();//ã‚¯ãƒªãƒƒã‚¯ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¾—ã‚‹ï¼å‹ãŒé•ã†ã®ã§ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹
+		Icon theIcon = theButton.getIcon();//theIconã«ã¯ï¼Œç¾åœ¨ã®ãƒœã‚¿ãƒ³ã«è¨­å®šã•ã‚ŒãŸã‚¢ã‚¤ã‚³ãƒ³ãŒå…¥ã‚‹
 
 		//if(theButton.getText().equals("PASS")){
 		//	System.out.println("PURESS THE PASS BUTOON");
 		//}
 
 		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon)){
-			String theArrayIndex = theButton.getActionCommand();//ƒ{ƒ^ƒ“‚Ì”z—ñ‚Ì”Ô†‚ğæ‚èo‚·
+			String theArrayIndex = theButton.getActionCommand();//ãƒœã‚¿ãƒ³ã®é…åˆ—ã®ç•ªå·ã‚’å–ã‚Šå‡ºã™
 			int temp = Integer.parseInt(theArrayIndex);
 			int tempx = temp / 8;
 			int tempy = temp % 8;
 			//System.out.println("tempx = " + tempx + "tempy = " + tempy);
 			if(judgeButton(tempy, tempx)){
-				//‚¨‚¯‚é
+				//ãŠã‘ã‚‹
 				Icon whichTurn = imturnLabel.getIcon();
 				if(whichTurn.equals(myturnIcon)){
 					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
-					//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
+					//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
 					out.println(msg);
 					out.flush();
 					repaint();
 				} else {
-					System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚Í’u‚¯‚Ü‚¹‚ñ");
+					System.out.println("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã«ã¯ç½®ã‘ã¾ã›ã‚“");
 				}
 
 			} else {
-				//’u‚¯‚È‚¢
+				//ç½®ã‘ãªã„
 			}
-			repaint();//‰æ–Ê‚ÌƒIƒuƒWƒFƒNƒg‚ğ•`‰æ‚µ’¼‚·
+			repaint();//ç”»é¢ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æç”»ã—ç›´ã™
 
 		} else if(theIcon.equals(passIcon)){
 				Icon whichTurn = imturnLabel.getIcon();
 				String msg = "PASS" + " " + myTurn + " " + myColor;
-				//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
+				//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
 				if(whichTurn.equals(myturnIcon)){
 				out.println(msg);
 				out.flush();
 				repaint();
 				} else {
-					System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚ÍƒpƒX‚Å‚«‚Ü‚¹‚ñ");
+					System.out.println("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã«ã¯ãƒ‘ã‚¹ã§ãã¾ã›ã‚“");
 				}
 
 		} else if(theIcon.equals(resetIcon)){
-				String msg = "RESET"+ " " + myColor;
-				//ƒT[ƒo‚Éî•ñ‚ğ‘—‚é
+				/*String msg = "RESET"+ " " + myColor;
+				//ã‚µãƒ¼ãƒã«æƒ…å ±ã‚’é€ã‚‹
 				out.println(msg);
 				out.flush();
-				repaint();
+				repaint();*/
+				//AudioClip SE1;
+				//AudioClip SE1=getAudioClip(getDocumentBase(), "sounds/pok.mp3"); //ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+				//SE1.play(); //ä¸€å›å†ç”Ÿ
 		}
 	}
 
-	public void mouseEntered(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒg‚É“ü‚Á‚½‚Æ‚«‚Ìˆ—
-		//System.out.println("ƒ}ƒEƒX‚ª“ü‚Á‚½");
+	public void mouseEntered(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å…¥ã£ãŸã¨ãã®å‡¦ç†
+		//System.out.println("ãƒã‚¦ã‚¹ãŒå…¥ã£ãŸ");
 	}
 
-	public void mouseExited(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒg‚©‚ço‚½‚Æ‚«‚Ìˆ—
-		//System.out.println("ƒ}ƒEƒX’Eo");
+	public void mouseExited(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰å‡ºãŸã¨ãã®å‡¦ç†
+		//System.out.println("ãƒã‚¦ã‚¹è„±å‡º");
 	}
 
-	public void mousePressed(MouseEvent e) {//ƒ}ƒEƒX‚ÅƒIƒuƒWƒFƒNƒg‚ğ‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—iƒNƒŠƒbƒN‚Æ‚Ìˆá‚¢‚É’ˆÓj
-		//System.out.println("ƒ}ƒEƒX‚ğ‰Ÿ‚µ‚½");
+	public void mousePressed(MouseEvent e) {//ãƒã‚¦ã‚¹ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŠ¼ã—ãŸã¨ãã®å‡¦ç†ï¼ˆã‚¯ãƒªãƒƒã‚¯ã¨ã®é•ã„ã«æ³¨æ„ï¼‰
+		//System.out.println("ãƒã‚¦ã‚¹ã‚’æŠ¼ã—ãŸ");
 	}
 
-	public void mouseReleased(MouseEvent e) {//ƒ}ƒEƒX‚Å‰Ÿ‚µ‚Ä‚¢‚½ƒIƒuƒWƒFƒNƒg‚ğ—£‚µ‚½‚Æ‚«‚Ìˆ—
-		//System.out.println("ƒ}ƒEƒX‚ğ•ú‚µ‚½");
+	public void mouseReleased(MouseEvent e) {//ãƒã‚¦ã‚¹ã§æŠ¼ã—ã¦ã„ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é›¢ã—ãŸã¨ãã®å‡¦ç†
+		//System.out.println("ãƒã‚¦ã‚¹ã‚’æ”¾ã—ãŸ");
 	}
 
-	public void mouseDragged(MouseEvent e) {//ƒ}ƒEƒX‚ÅƒIƒuƒWƒFƒNƒg‚Æ‚ğƒhƒ‰ƒbƒO‚µ‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
+	public void mouseDragged(MouseEvent e) {//ãƒã‚¦ã‚¹ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã‚’ãƒ‰ãƒ©ãƒƒã‚°ã—ã¦ã„ã‚‹ã¨ãã®å‡¦ç†
 	}
 
-	public void mouseMoved(MouseEvent e) {//ƒ}ƒEƒX‚ªƒIƒuƒWƒFƒNƒgã‚ÅˆÚ“®‚µ‚½‚Æ‚«‚Ìˆ—
+	public void mouseMoved(MouseEvent e) {//ãƒã‚¦ã‚¹ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šã§ç§»å‹•ã—ãŸã¨ãã®å‡¦ç†
 	}
 
 	public boolean judgeButton(int y, int x){
-		//System.out.println("judgeButton‚ªŒÄ‚Î‚ê‚Ü‚µ‚½"); //ƒfƒoƒbƒN
+		//System.out.println("judgeButtonãŒå‘¼ã°ã‚Œã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
 		boolean flag = false;
 		Icon IconComp;
 			for(int i=-1; i<=1; i++){
 				for(int j=-1; j<=1; j++){
-					if(flipButtons(y, x, j, i) >= 1){ //ˆê‚ÂˆÈã— •Ô‚¹‚éê‡
+					if(flipButtons(y, x, j, i) >= 1){ //ä¸€ã¤ä»¥ä¸Šè£è¿”ã›ã‚‹å ´åˆ
 						IconComp = buttonArray[y+j][x+i].getIcon();
 						//System.out.println("y+j="+(y+j)+", x+i="+(x+i));
 						flag = true;
 
 						for(int dy=j, dx=i, k=0; k<flipNum; k++, dy+=j, dx+=i){
-							//ƒ{ƒ^ƒ“‚ÌˆÊ’uî•ñ‚ğì‚é
+							//ãƒœã‚¿ãƒ³ã®ä½ç½®æƒ…å ±ã‚’ä½œã‚‹
 							int msgy = y + dy;
 							int msgx = x + dx;
 							int theArrayIndex = msgx*8 + msgy;
 							Icon whichTurn = imturnLabel.getIcon();
 
-							//©•ª‚Ìƒ^[ƒ“‚Ì‚Æ‚«‚¾‚¯ƒtƒŠƒbƒv‘—M
+							//è‡ªåˆ†ã®ã‚¿ãƒ¼ãƒ³ã®ã¨ãã ã‘ãƒ•ãƒªãƒƒãƒ—é€ä¿¡
 							if(whichTurn.equals(myturnIcon)){
 								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
 								out.println(msg);
 								out.flush();
 								repaint();
 							} else {
-								System.out.println("‘Šè‚Ìƒ^[ƒ“‚É‚Í— •Ô‚¹‚Ü‚¹‚ñ");
+								System.out.println("ç›¸æ‰‹ã®ã‚¿ãƒ¼ãƒ³ã«ã¯è£è¿”ã›ã¾ã›ã‚“");
 							}
 						}
-					} else { //‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢
-						//System.out.println("‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢"); //ƒfƒoƒbƒN
+					} else { //ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„
+						//System.out.println("ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„"); //ãƒ‡ãƒãƒƒã‚¯
 					}
 				}
 			}
@@ -447,14 +456,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public int flipButtons(int y, int x, int j, int i){
-		//System.out.println("flipButtons‚ªŒÄ‚Î‚ê‚Ü‚µ‚½"); //ƒfƒoƒbƒN
+		//System.out.println("flipButtonsãŒå‘¼ã°ã‚Œã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
 		Icon IconRev;
-		flipNum = 0; //‰Šú‰»
-		for(int dy=j, dx=i; ; dy+=j, dx+=i) { //I—¹ğŒ‚ª‹ó‚Å‚·
+		flipNum = 0; //åˆæœŸåŒ–
+		for(int dy=j, dx=i; ; dy+=j, dx+=i) { //çµ‚äº†æ¡ä»¶ãŒç©ºã§ã™
 			try{
 				IconRev = buttonArray[(y+dy)][(x+dx)].getIcon();
-				//System.out.println("y+dy = " + (y+dy) + " " + "x+dx = " + (x+dx)); //ƒfƒoƒbƒN
-				//System.out.println("IconRev = " + IconRev); //ƒfƒoƒbƒN
+				//System.out.println("y+dy = " + (y+dy) + " " + "x+dx = " + (x+dx)); //ãƒ‡ãƒãƒƒã‚¯
+				//System.out.println("IconRev = " + IconRev); //ãƒ‡ãƒãƒƒã‚¯
 				if(dy == 0){
 					if(dx == 0){
 						flipNum = 0;
@@ -463,21 +472,21 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				}
 
 				if(IconRev.equals(boardIcon)){
-				//System.out.println("‚»‚Ì•ûŒü‚É‚Í—Î‚ª‚ ‚é‚æ");
+				//System.out.println("ãã®æ–¹å‘ã«ã¯ç·‘ãŒã‚ã‚‹ã‚ˆ");
 				flipNum = 0;
 				break;
 				} else if(IconRev.equals(myIcon)) {
-					//System.out.println("‚»‚Ì•ûŒü‚É‚ÍŒN‚ÌF‚ª‚ ‚é‚æ");
+					//System.out.println("ãã®æ–¹å‘ã«ã¯å›ã®è‰²ãŒã‚ã‚‹ã‚ˆ");
 					break;
 				} else if(IconRev.equals(yourIcon)){
-					//System.out.println("‚Ü‚¾i‚ß‚é‚æ");
+					//System.out.println("ã¾ã é€²ã‚ã‚‹ã‚ˆ");
 					flipNum++;
 				} else if(IconRev.equals(guideIcon)){
 					flipNum = 0;
 					break;
 				}
 			}catch(ArrayIndexOutOfBoundsException e){
-				//System.out.println("‚»‚Ì•ûŒü‚É‚Í”Õ–Ê‚ª‚ ‚è‚Ü‚¹‚ñ");
+				//System.out.println("ãã®æ–¹å‘ã«ã¯ç›¤é¢ãŒã‚ã‚Šã¾ã›ã‚“");
 				flipNum = 0;
 				break;
 			}
@@ -487,28 +496,28 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 	public static void setFlame() {
 		JFrame frame = new JFrame();
-		// ƒ^ƒCƒgƒ‹–¼‚ğİ’è
-		frame.setTitle( "”wŒiF‚ğÔF‚É" );
-		// ƒtƒŒ[ƒ€‚Ì‘å‚«‚³‚ğİ’è
+		// ã‚¿ã‚¤ãƒˆãƒ«åã‚’è¨­å®š
+		frame.setTitle( "èƒŒæ™¯è‰²ã‚’èµ¤è‰²ã«" );
+		// ãƒ•ãƒ¬ãƒ¼ãƒ ã®å¤§ãã•ã‚’è¨­å®š
 		frame.setSize( 400, 320 );
-		// h~hƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Ìˆ—‚ğİ’è
+		// â€Ã—â€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸæ™‚ã®å‡¦ç†ã‚’è¨­å®š
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		// ”wŒiF‚Ì•ÏX
+		// èƒŒæ™¯è‰²ã®å¤‰æ›´
 		frame.getContentPane().setBackground( Color.RED );
-		// ƒtƒŒ[ƒ€‚ğ•\¦
+		// ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¡¨ç¤º
 		frame.setVisible( true );
 	}
 
-	///////////////////////////////////////////UI‚Ì¶¬////////////////////////////
+	///////////////////////////////////////////UIã®ç”Ÿæˆ////////////////////////////
 	public void setUp(){
-		//ƒEƒBƒ“ƒhƒE‚ğì¬‚·‚é
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é‚Æ‚«‚ÉC³‚µ‚­•Â‚¶‚é‚æ‚¤‚Éİ’è‚·‚é
-		setTitle("MyClient");//ƒEƒBƒ“ƒhƒE‚Ìƒ^ƒCƒgƒ‹‚ğİ’è‚·‚é
-		setSize(812,635);//ƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY‚ğİ’è‚·‚é
-		//getContentPane().setBackground( Color.decode("#685653")); //”wŒiF‚Ì•ÏX
-		c = getContentPane();//ƒtƒŒ[ƒ€‚ÌƒyƒCƒ“‚ğæ“¾‚·‚é
+		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆã™ã‚‹
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚‹ã¨ãã«ï¼Œæ­£ã—ãé–‰ã˜ã‚‹ã‚ˆã†ã«è¨­å®šã™ã‚‹
+		setTitle("MyClient");//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¨­å®šã™ã‚‹
+		setSize(812,635);//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºã‚’è¨­å®šã™ã‚‹
+		//getContentPane().setBackground( Color.decode("#685653")); //èƒŒæ™¯è‰²ã®å¤‰æ›´
+		c = getContentPane();//ãƒ•ãƒ¬ãƒ¼ãƒ ã®ãƒšã‚¤ãƒ³ã‚’å–å¾—ã™ã‚‹
 
-		//ƒAƒCƒRƒ“‚Ìİ’è
+		//ã‚¢ã‚¤ã‚³ãƒ³ã®è¨­å®š
 		redIcon = new ImageIcon("icons/r-icon.png");
 		whiteIcon = new ImageIcon("icons/w-icon.png");
 		boardIcon = new ImageIcon("icons/b-icon.png");
@@ -516,22 +525,22 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		resetIcon = new ImageIcon("icons/reset.png");
 		guideIcon = new ImageIcon("icons/g-icon.png");
 
-		c.setLayout(null);//©“®ƒŒƒCƒAƒEƒg‚Ìİ’è‚ğs‚í‚È‚¢
-		//ƒ{ƒ^ƒ“‚Ì¶¬
+		c.setLayout(null);//è‡ªå‹•ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®è¨­å®šã‚’è¡Œã‚ãªã„
+		//ãƒœã‚¿ãƒ³ã®ç”Ÿæˆ
 
 		buttonArray = new JButton[8][8];
 
 		for(int j=0;j<8;j++){
 			for(int i=0;i<8;i++){
-			buttonArray[i][j] = new JButton(boardIcon);//ƒ{ƒ^ƒ“‚ÉƒAƒCƒRƒ“‚ğİ’è‚·‚é
-			c.add(buttonArray[i][j]);//ƒyƒCƒ“‚É“\‚è•t‚¯‚é
+			buttonArray[i][j] = new JButton(boardIcon);//ãƒœã‚¿ãƒ³ã«ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®šã™ã‚‹
+			c.add(buttonArray[i][j]);//ãƒšã‚¤ãƒ³ã«è²¼ã‚Šä»˜ã‘ã‚‹
 
-			buttonArray[i][j].setBounds(i*45+428,j*45+15,45,45);//ƒ{ƒ^ƒ“‚Ì‘å‚«‚³‚ÆˆÊ’u‚ğİ’è‚·‚éD(xÀ•WCyÀ•W,x‚Ì•,y‚Ì•j
-			buttonArray[i][j].addMouseListener(this);//ƒ{ƒ^ƒ“‚ğƒ}ƒEƒX‚Å‚³‚í‚Á‚½‚Æ‚«‚É”½‰‚·‚é‚æ‚¤‚É‚·‚é
-			buttonArray[i][j].addMouseMotionListener(this);//ƒ{ƒ^ƒ“‚ğƒ}ƒEƒX‚Å“®‚©‚»‚¤‚Æ‚µ‚½‚Æ‚«‚É”½‰‚·‚é‚æ‚¤‚É‚·‚é
-			buttonArray[i][j].setActionCommand(Integer.toString(j*8+i));//ƒ{ƒ^ƒ“‚É”z—ñ‚Ìî•ñ‚ğ•t‰Á‚·‚éiƒlƒbƒgƒ[ƒN‚ğ‰î‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ğ¯•Ê‚·‚é‚½‚ßj
-			buttonArray[i][j].setContentAreaFilled(false); //ƒ{ƒ^ƒ“”wŒi‚Ì“§–¾‰»
-			//buttonArray[i][j].setBorderPainted(false); //ü‚Ì“§–¾‰»
+			buttonArray[i][j].setBounds(i*45+428,j*45+15,45,45);//ãƒœã‚¿ãƒ³ã®å¤§ãã•ã¨ä½ç½®ã‚’è¨­å®šã™ã‚‹ï¼(xåº§æ¨™ï¼Œyåº§æ¨™,xã®å¹…,yã®å¹…ï¼‰
+			buttonArray[i][j].addMouseListener(this);//ãƒœã‚¿ãƒ³ã‚’ãƒã‚¦ã‚¹ã§ã•ã‚ã£ãŸã¨ãã«åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
+			buttonArray[i][j].addMouseMotionListener(this);//ãƒœã‚¿ãƒ³ã‚’ãƒã‚¦ã‚¹ã§å‹•ã‹ãã†ã¨ã—ãŸã¨ãã«åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
+			buttonArray[i][j].setActionCommand(Integer.toString(j*8+i));//ãƒœã‚¿ãƒ³ã«é…åˆ—ã®æƒ…å ±ã‚’ä»˜åŠ ã™ã‚‹ï¼ˆãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚’ä»‹ã—ã¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è­˜åˆ¥ã™ã‚‹ãŸã‚ï¼‰
+			buttonArray[i][j].setContentAreaFilled(false); //ãƒœã‚¿ãƒ³èƒŒæ™¯ã®é€æ˜åŒ–
+			//buttonArray[i][j].setBorderPainted(false); //ç·šã®é€æ˜åŒ–
 		  }
 		}
 
@@ -540,42 +549,62 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		buttonArray[3][4].setIcon(whiteIcon);
 		buttonArray[4][4].setIcon(redIcon);
 
-		//ƒ|ƒCƒ“ƒ^[ƒJƒEƒ“ƒg ‚Ù‚©‚©‚çg‚¤‚Ì‚ÅŠO‚ÅéŒ¾
+		//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚«ã‚¦ãƒ³ãƒˆ ã»ã‹ã‹ã‚‰ä½¿ã†ã®ã§å¤–ã§å®£è¨€
 		c.add(pointcon);
-		pointcon.setBounds(398,178,30,30);
+		pointcon.setBounds(398,180,30,30);
 		pointcon.setText(Integer.toString(countSub));
 		pointcon.setForeground(Color.decode("#c0bfbf"));
-		//pointcon.setOpaque(true); //”wŒi“§–¾‰»
-		pointcon.setFont(new Font("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-R", Font.PLAIN, 18));
+		//pointcon.setOpaque(true); //èƒŒæ™¯é€æ˜åŒ–
+		pointcon.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 18));
 
-		//ƒ|ƒCƒ“ƒ^[ ‚Ù‚©‚©‚çg‚¤‚Ì‚ÅŠO‚ÅéŒ¾
+		//ãƒã‚¤ãƒ³ã‚¿ãƒ¼ ã»ã‹ã‹ã‚‰ä½¿ã†ã®ã§å¤–ã§å®£è¨€
 		c.add(pointerLabel);
-		pointerLabel.setBounds(360-40+12,200-70+35,60,60);
+		pointerLabel.setBounds(360-40+13,200-70+35,60,60);
 		//pointerLabel.setOpaque(true);
 
-		//ƒƒO‚Ì’†g ‚Ù‚©‚Å‚àg‚¤‚Ì‚Åæ“ª‚Å’è‹`B
-		//JLabel logComment = new JLabel();
-		c.add(logComment);
-		logComment.setBounds(30,-20,300,300);
-		logComment.setText("‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B");
-		logComment.setFont(new Font("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-R", Font.PLAIN, 16));
-		logComment.setForeground(Color.decode("#FFFFFF"));
+		//ãƒ­ã‚°ã®ä¸­èº« ã»ã‹ã§ã‚‚ä½¿ã†ã®ã§å…ˆé ­ã§å®šç¾©ã€‚
+		//JLabel strow1 = new JLabel();
+		c.add(strow1);
+		strow1.setBounds(20,-10,300,300);
+		strow1.setText("åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã§ã™ã€‚åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã€‚");
+		strow1.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		strow1.setForeground(new Color(192,191,191,255));
 
-		//JLabel logComment2 = new JLabel();
-		c.add(logComment2);
-		logComment2.setBounds(30,20,300,300);
-		logComment2.setText("‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B");
-		logComment2.setFont(new Font("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-R", Font.PLAIN, 16));
-		logComment2.setForeground(Color.decode("#FFFFFF"));
+		//JLabel strow2 = new JLabel();
+		c.add(strow2);
+		strow2.setBounds(20,50,300,300);
+		strow2.setText("åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã§ã™ã€‚åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã€‚");
+		strow2.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		strow2.setForeground(new Color(192,191,191,255));
 
-		//JLabel logComment3 = new JLabel();
-		c.add(logComment3);
-		logComment3.setBounds(30,60,300,300);
-		logComment3.setText("‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B‰Šú‚ÌƒeƒLƒXƒg‚Å‚·B");
-		logComment3.setFont(new Font("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-R", Font.PLAIN, 16));
-		logComment3.setForeground(Color.decode("#FFFFFF"));
+		//JLabel strow3 = new JLabel();
+		c.add(strow3);
+		strow3.setBounds(20,110,300,300);
+		strow3.setText("åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã§ã™ã€‚åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã€‚");
+		strow3.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		strow3.setForeground(new Color(192,191,191,255));
 
-		//ƒpƒXƒ{ƒ^ƒ“
+		//JLabel strow4 = new JLabel();
+		//ã“ã“ã¯MAX15æ–‡å­—
+		c.add(strow4);
+		strow4.setBounds(20,170,300,300);
+		strow4.setText("åˆæœŸã®ãƒ†ã‚­ã‚¹ãƒˆã§ã™ã€‚åˆæœŸã€‚");
+		strow4.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		strow4.setForeground(new Color(192,191,191,255));
+
+		c.add(comrow1);
+		comrow1.setBounds(388,412,200,100);
+		comrow1.setText("ã“ã‚ã‚“ã¨ã ãŠ");
+		comrow1.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		comrow1.setForeground(new Color(192,191,191,255));
+
+		c.add(comrow2);
+		comrow2.setBounds(388,452,200,100);
+		comrow2.setText("ã«ãã‚‡ã†ã‚ã ãŠ");
+		comrow2.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 16));
+		comrow2.setForeground(new Color(192,191,191,255));
+
+		//ãƒ‘ã‚¹ãƒœã‚¿ãƒ³
 		passButton = new JButton(passIcon);
 		c.add(passButton);
 		passButton.setBounds(550,390,100,100);
@@ -584,7 +613,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		passButton.setContentAreaFilled(false);
 		//passButton.setBorderPainted(false);
 
-		//resetƒ{ƒ^ƒ“
+		//resetãƒœã‚¿ãƒ³
 		resetButton = new JButton(resetIcon);
 		c.add(resetButton);
 		resetButton.setBounds(680,390,100,100);
@@ -593,15 +622,15 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		resetButton.setContentAreaFilled(false);
 		//resetButton.setBorderPainted(false);
 
-		/*//ƒ^[ƒ“ƒJƒEƒ“ƒg‚Ì’†g
-		//JLabel tComment = new JLabel();  ‚Ù‚©‚Å‚àg‚¤‚Ì‚Åæ“ª‚Å’è‹`B
+		/*//ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®ä¸­èº«
+		//JLabel tComment = new JLabel();  ã»ã‹ã§ã‚‚ä½¿ã†ã®ã§å…ˆé ­ã§å®šç¾©ã€‚
 		c.add(tComment);
 		tComment.setBounds(630,505,200,60);
-		tComment.setText("¡‚Í" + TurnCount + "ƒ^[ƒ“–Ú‚Å‚·");
-		tComment.setFont(new Font("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-R", Font.PLAIN, 20));
+		tComment.setText("ä»Šã¯" + TurnCount + "ã‚¿ãƒ¼ãƒ³ç›®ã§ã™");
+		tComment.setFont(new Font("UD ãƒ‡ã‚¸ã‚¿ãƒ« æ•™ç§‘æ›¸ä½“ N-B", Font.PLAIN, 20));
 		tComment.setForeground(Color.white);
 
-		//ƒ^[ƒ“ƒJƒEƒ“ƒg‚Ì‰º’n
+		//ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®ä¸‹åœ°
 		ImageIcon tConIcon = new ImageIcon("images/count.png");
 		JLabel tConBack = new JLabel(tConIcon);
 		c.add(tConBack);
@@ -611,7 +640,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 	//////////////////////////////////////////////////////////////////////////////
 
-	//ƒŠƒZƒbƒg‚Ìˆ—
+	//ãƒªã‚»ãƒƒãƒˆã®å‡¦ç†
 	public void resetAll(){
 		for(int j=0;j<8;j++){
 			for(int i=0;i<8;i++){
@@ -630,40 +659,40 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//220
 		//countSub = Math.abs(my - your);
 		countSub = my - your;
-		//‰Šú‰»
-		pointerLabel.setLocation(360-40+12,200-70+35);
+		//åˆæœŸåŒ–
+		pointerLabel.setLocation(360-40+13,200-70+35);
 
-		//ƒ‰ƒxƒ‹‚ÌˆÊ’u‚Í”÷’²®‚µ‚Ä‚­‚¾‚³‚¢
+		//ãƒ©ãƒ™ãƒ«ã®ä½ç½®ã¯å¾®èª¿æ•´ã—ã¦ãã ã•ã„
 		if(countSub == 0){
 			pointcon.setText(" " + Integer.toString(countSub));
-			pointcon.setLocation(398,178);
+			pointcon.setLocation(398,180);
 		} else if (countSub > 0){
-			pointerLabel.setLocation(360-40+12,200-70+35 - countSub*7);
+			pointerLabel.setLocation(360-40+13,200-70+35 - countSub*9);
 			pointcon.setText("+" + Integer.toString(countSub));
-			pointcon.setLocation(398,178 - countSub*7);
+			pointcon.setLocation(398,180 - countSub*9);
 		} else {
-			pointerLabel.setLocation(360-40+12,200-70+35 - countSub*7);
+			pointerLabel.setLocation(360-40+13,200-70+35 - countSub*9);
 			pointcon.setText(Integer.toString(countSub));
-			pointcon.setLocation(398,178 - countSub*7);
+			pointcon.setLocation(398,180 - countSub*9);
 		}
 		repaint();
 	}
 
 	public void setTurn(){
-		//‰‰ñ‚Ìˆ—
+		//åˆå›ã®å‡¦ç†
 		if(myTurn == 3){
 			if(myIcon.equals(whiteIcon)){
 				imturnLabel.setIcon(myturnIcon);
-				//‚ ‚È‚½‚ÌƒAƒCƒRƒ“‚Ì‚·‚®‰º‚É
+				//ã‚ãªãŸã®ã‚¢ã‚¤ã‚³ãƒ³ã®ã™ãä¸‹ã«
 				imturnLabel.setBounds(180,540,126,36);
-				//‰‰ñ‚ÌƒKƒCƒh•\¦
+				//åˆå›ã®ã‚¬ã‚¤ãƒ‰è¡¨ç¤º
 				guide();
 			} else {
 				imturnLabel.setIcon(yourturnIcon);
 				imturnLabel.setBounds(30,540,126,36);
 			}
 		} else {
-			//“ñ‰ñ–ÚˆÈ~‚Ìˆ—
+			//äºŒå›ç›®ä»¥é™ã®å‡¦ç†
 			Icon whichTurn = imturnLabel.getIcon();
 			System.out.println(whichTurn);
 			if(whichTurn.equals(myturnIcon)){
@@ -677,8 +706,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void guide(){
-		System.out.println("guide();‚ªŒÄ‚Î‚ê‚½");
-		//‰Šú‰»
+		//System.out.println("guide();ãŒå‘¼ã°ã‚ŒãŸ");
+		//åˆæœŸåŒ–
 		guideCount = 0;
 		Icon IconComp;
 		Icon whichTurn = imturnLabel.getIcon();
@@ -688,25 +717,25 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					IconComp = buttonArray[i][j].getIcon();
 					//System.out.println(IconComp);
 					if(IconComp == boardIcon){
-						//—Î‚Ì‚Æ‚«’TõŠJn
-						//System.out.println("ƒWƒƒƒbƒWŠJn");
+						//ç·‘ã®ã¨ãæ¢ç´¢é–‹å§‹
+						//System.out.println("ã‚¸ãƒ£ãƒƒã‚¸é–‹å§‹");
 						judgeButton2(i,j);
 					}
 				}
 			}
-			//forƒ‹[ƒvI‚í‚Á‚½Œã‚ÅƒKƒCƒh‚Ì”‚ğ‘—MAŸ”s”»’è
+			//forãƒ«ãƒ¼ãƒ—çµ‚ã‚ã£ãŸå¾Œã§ã‚¬ã‚¤ãƒ‰ã®æ•°ã‚’é€ä¿¡ã€å‹æ•—åˆ¤å®š
 			String msg = "GUIDE" + " " + guideCount;
 			out.println(msg);
 			out.flush();
 			repaint();
 		} else {
-			//‘Šè‚Ìê‡‚ÍƒKƒCƒh‚ğƒŠƒZƒbƒg
+			//ç›¸æ‰‹ã®å ´åˆã¯ã‚¬ã‚¤ãƒ‰ã‚’ãƒªã‚»ãƒƒãƒˆ
 			for(int i=0; i<8; i++){
 				for(int j=0; j<8; j++){
-					//‚·‚Å‚É‚ ‚éƒKƒCƒh‚ÍÁ‚·
+					//ã™ã§ã«ã‚ã‚‹ã‚¬ã‚¤ãƒ‰ã¯æ¶ˆã™
 					IconComp = buttonArray[i][j].getIcon();
 					if(IconComp == guideIcon){
-						//System.out.println("ƒKƒCƒhÁ‚µ‚½");
+						//System.out.println("ã‚¬ã‚¤ãƒ‰æ¶ˆã—ãŸ");
 						buttonArray[i][j].setIcon(boardIcon);
 					}
 				}
@@ -715,23 +744,23 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void judgeButton2(int y, int x){
-		//System.out.println("judgeButton2‚ªŒÄ‚Î‚ê‚Ü‚µ‚½"); //ƒfƒoƒbƒN
+		//System.out.println("judgeButton2ãŒå‘¼ã°ã‚Œã¾ã—ãŸ"); //ãƒ‡ãƒãƒƒã‚¯
 		boolean flag = false;
 		//Icon IconComp;
 			for(int i=-1; i<=1; i++){
 				for(int j=-1; j<=1; j++){
-					if(flipButtons(y, x, j, i) >= 1){ //ˆê‚ÂˆÈã— •Ô‚¹‚éê‡
+					if(flipButtons(y, x, j, i) >= 1){ //ä¸€ã¤ä»¥ä¸Šè£è¿”ã›ã‚‹å ´åˆ
 						//System.out.println("flipNum" + flipNum);
 						//System.out.println("y = " + y + "x = " + x);
 						flag = true;
 						break;
-					} else { //‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢
-						//System.out.println("‚Ğ‚Æ‚Â‚à— •Ô‚¹‚È‚¢"); //ƒfƒoƒbƒN
+					} else { //ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„
+						//System.out.println("ã²ã¨ã¤ã‚‚è£è¿”ã›ãªã„"); //ãƒ‡ãƒãƒƒã‚¯
 					}
 				}
 			}
 			if(flag){
-				//System.out.println("ƒAƒCƒRƒ“•Ï‚¦‚½‚æ");
+				//System.out.println("ã‚¢ã‚¤ã‚³ãƒ³å¤‰ãˆãŸã‚ˆ");
 				guideCount++;
 				buttonArray[y][x].setIcon(guideIcon);
 			}
@@ -742,74 +771,74 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		switch(tCon){
 		case 1:
-			logComment.setText("‚Ş‚©‚µA‚»‚ê‚Ü‚Å‚É’N‚àŒ©‚½‚±‚Æ‚ª‚È‚¢"); //‰Šúİ’è‚Å‚Íˆês‚Å20•¶š‚Å‚·
-			logComment2.setText("‚Ù‚Ç‚«‚ê‚¢‚ÈA—‚Ìq‚ª‚¢‚Ü‚µ‚½B");
-			logComment3.setText("");
+			strow1.setText("ã‚€ã‹ã—ã€ãã‚Œã¾ã§ã«èª°ã‚‚è¦‹ãŸã“ã¨ãŒãªã„"); //åˆæœŸè¨­å®šã§ã¯ä¸€è¡Œã§20æ–‡å­—ã§ã™
+			strow2.setText("ã»ã©ãã‚Œã„ãªã€å¥³ã®å­ãŒã„ã¾ã—ãŸã€‚");
+			strow3.setText("");
 			break;
 		case 2:
-			logComment.setText("‚±‚Ìq‚É–²’†‚È‚¨‚Î‚ ‚³‚ñ‚ªÔ‚¢‚¸‚«‚ñ‚ğ");
-			logComment2.setText("ì‚ç‚¹‚Ü‚µ‚½‚ªA‚»‚ê‚ª‚æ‚­—‡‚Á‚½‚Ì‚Å");
-			logComment3.setText("‚Ç‚±‚Ös‚Á‚Ä‚àuÔ‚¸‚«‚ñ‚¿‚á‚ñv‚ÆŒÄ‚Î‚ê‚Ü‚µ‚½B");
+			strow1.setText("ã“ã®å­ã«å¤¢ä¸­ãªãŠã°ã‚ã•ã‚“ãŒèµ¤ã„ãšãã‚“ã‚’");
+			strow2.setText("ä½œã‚‰ã›ã¾ã—ãŸãŒã€ãã‚ŒãŒã‚ˆãä¼¼åˆã£ãŸã®ã§");
+			strow3.setText("ã©ã“ã¸è¡Œã£ã¦ã‚‚ã€Œèµ¤ãšãã‚“ã¡ã‚ƒã‚“ã€ã¨å‘¼ã°ã‚Œã¾ã—ãŸã€‚");
 			break;
 		case 3:
-			logComment.setText("‚ ‚é“úA•êe‚Í—‚Ìq‚É‚¢‚¢‚Ü‚µ‚½B");
-			logComment2.setText("u‚¨‚Î‚ ‚³‚ñ‚ª•a‹C‚¾‚»‚¤‚¾‚©‚çA‚Ç‚ñ‚È‹ï‡‚©");
-			logComment3.setText("Œ©‚Ä‚¨‚¢‚ÅB‚±‚ÌƒKƒŒƒbƒg‚Æƒoƒ^[‚Ìšâ‚ğ‚à‚Á‚Ä‚Ëv");
+			strow1.setText("ã‚ã‚‹æ—¥ã€æ¯è¦ªã¯å¥³ã®å­ã«ã„ã„ã¾ã—ãŸã€‚");
+			strow2.setText("ã€ŒãŠã°ã‚ã•ã‚“ãŒç—…æ°—ã ãã†ã ã‹ã‚‰ã€ã©ã‚“ãªå…·åˆã‹");
+			strow3.setText("è¦‹ã¦ãŠã„ã§ã€‚ã“ã®ã‚¬ãƒ¬ãƒƒãƒˆã¨ãƒã‚¿ãƒ¼ã®å£ºã‚’ã‚‚ã£ã¦ã­ã€");
 			break;
 		case 4:
-			logComment.setText("Ô‚¸‚«‚ñ‚¿‚á‚ñ‚Í•Ê‚Ì‘º‚ÉZ‚Ş‚¨‚Î‚ ‚³‚ñ‚Ì");
-			logComment2.setText("Š‚ÖŒü‚©‚Á‚ÄA‚·‚®‚Éo‚©‚¯‚Ü‚µ‚½B");
-			logComment3.setText("");
+			strow1.setText("èµ¤ãšãã‚“ã¡ã‚ƒã‚“ã¯åˆ¥ã®æ‘ã«ä½ã‚€ãŠã°ã‚ã•ã‚“ã®");
+			strow2.setText("æ‰€ã¸å‘ã‹ã£ã¦ã€ã™ãã«å‡ºã‹ã‘ã¾ã—ãŸã€‚");
+			strow3.setText("");
 			break;
-		//‚±‚±‚©‚ç•ªŠò
+		//ã“ã“ã‹ã‚‰åˆ†å²
 		case 5:
 			if(myIcon == redIcon){
-				//Ô‚¸‚«‚ñ‹“_
-				logComment.setText("‚ ‚È‚½‚ªX‚ğ­‚µ•à‚¢‚Ä‚¢‚é‚ÆA");
-				logComment2.setText("‚¨‚¨‚©‚İ‚ªº‚ğ‚©‚¯‚Ä‚«‚Ü‚µ‚½B");
-				logComment3.setText("");
+				//èµ¤ãšãã‚“è¦–ç‚¹
+				strow1.setText("ã‚ãªãŸãŒæ£®ã‚’å°‘ã—æ­©ã„ã¦ã„ã‚‹ã¨ã€");
+				strow2.setText("ãŠãŠã‹ã¿ãŒå£°ã‚’ã‹ã‘ã¦ãã¾ã—ãŸã€‚");
+				strow3.setText("");
 			}else {
-				//‚¨‚¨‚©‚İ‹“_
-				logComment.setText("‚¢‚Â‚à‚Ì‚æ‚¤‚Éu‚¦‚³v‚ğ’T‚µ‚Ä‚¢‚é‚Æ");
-				logComment2.setText("Ô‚¢‚¸‚«‚ñ‚ğ‚©‚Ô‚Á‚½—‚Ìq‚ğŒ©‚Â‚¯‚Ü‚µ‚½B");
-				logComment3.setText("‚ ‚È‚½‚Íº‚ğ‚©‚¯‚é‚±‚Æ‚É‚µ‚Ü‚µ‚½B");
+				//ãŠãŠã‹ã¿è¦–ç‚¹
+				strow1.setText("ã„ã¤ã‚‚ã®ã‚ˆã†ã«ã€Œãˆã•ã€ã‚’æ¢ã—ã¦ã„ã‚‹ã¨");
+				strow2.setText("èµ¤ã„ãšãã‚“ã‚’ã‹ã¶ã£ãŸå¥³ã®å­ã‚’è¦‹ã¤ã‘ã¾ã—ãŸã€‚");
+				strow3.setText("ã‚ãªãŸã¯å£°ã‚’ã‹ã‘ã‚‹ã“ã¨ã«ã—ã¾ã—ãŸã€‚");
 			}
 			break;
 		case 6:
 			if(myIcon == redIcon){
-				//Ô‚¸‚«‚ñ‹“_
-				logComment.setText("u‚Ç‚±‚Ös‚­‚ÌHv");
-				logComment2.setText("u‚¨‚Î‚ ‚³‚ñ‚Ì‚¨‚¤‚¿‚Í‚Ç‚±Hv");
-				logComment3.setText("");
+				//èµ¤ãšãã‚“è¦–ç‚¹
+				strow1.setText("ã€Œã©ã“ã¸è¡Œãã®ï¼Ÿã€");
+				strow2.setText("ã€ŒãŠã°ã‚ã•ã‚“ã®ãŠã†ã¡ã¯ã©ã“ï¼Ÿã€");
+				strow3.setText("");
 			}else {
-				//‚¨‚¨‚©‚İ‹“_
-				logComment.setText("u‚Ç‚±‚Ös‚­‚ÌHv");
-				logComment2.setText("u‚¨‚Î‚ ‚³‚ñ‚Ì‚¨‚¤‚¿‚Í‚Ç‚±Hv");
-				logComment3.setText("");
+				//ãŠãŠã‹ã¿è¦–ç‚¹
+				strow1.setText("ã€Œã©ã“ã¸è¡Œãã®ï¼Ÿã€");
+				strow2.setText("ã€ŒãŠã°ã‚ã•ã‚“ã®ãŠã†ã¡ã¯ã©ã“ï¼Ÿã€");
+				strow3.setText("");
 			}
 			break;
 		}
 	}
 
 	public void endTurn(){
-		//System.out.println("endTurn‚ªŒÄ‚Î‚ê‚½");
-		setTurn(); //‚ ‚È‚½or‚ ‚¢‚Ä‚Ìƒ^[ƒ“‚Å‚·iƒ‰ƒxƒ‹Ø‚è‘Ö‚¦j
-		TurnCount++; //ƒ^[ƒ“ƒJƒEƒ“ƒg‚ğ‘‚â‚·
-		tComment.setText("¡‚Í" + TurnCount + "ƒ^[ƒ“–Ú‚Å‚·"); //ƒ‰ƒxƒ‹‚ÌƒZƒbƒg
-		guide(); //ƒKƒCƒh‚Ìì¬+’u‚¯‚éêŠ‚Ì”»’èi‚È‚¯‚ê‚ÎI—¹j
+		//System.out.println("endTurnãŒå‘¼ã°ã‚ŒãŸ");
+		setTurn(); //ã‚ãªãŸorã‚ã„ã¦ã®ã‚¿ãƒ¼ãƒ³ã§ã™ï¼ˆãƒ©ãƒ™ãƒ«åˆ‡ã‚Šæ›¿ãˆï¼‰
+		TurnCount++; //ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
+		tComment.setText("ä»Šã¯" + TurnCount + "ã‚¿ãƒ¼ãƒ³ç›®ã§ã™"); //ãƒ©ãƒ™ãƒ«ã®ã‚»ãƒƒãƒˆ
+		guide(); //ã‚¬ã‚¤ãƒ‰ã®ä½œæˆ+ç½®ã‘ã‚‹å ´æ‰€ã®åˆ¤å®šï¼ˆãªã‘ã‚Œã°çµ‚äº†ï¼‰
 		tellStory(TurnCount);
 	}
 
-	//Ÿ”s”»’è‚Å‚·
+	//å‹æ•—åˆ¤å®šã§ã™
 	public void whichWin(){
 		if(guideCount == 0){
 			countSub = myIconCount - yourIconCount;
 			if(countSub > 0){
-				tComment.setText("‚ ‚È‚½‚ÌŸ‚¿I");
+				tComment.setText("ã‚ãªãŸã®å‹ã¡ï¼");
 			} else if(countSub==0){
-				tComment.setText("ˆø‚«•ª‚¯I");
+				tComment.setText("å¼•ãåˆ†ã‘ï¼");
 			} else {
-				tComment.setText("‚ ‚È‚½‚Ì•‰‚¯I");
+				tComment.setText("ã‚ãªãŸã®è² ã‘ï¼");
 			}
 		}
 	}
