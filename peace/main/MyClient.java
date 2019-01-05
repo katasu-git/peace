@@ -52,13 +52,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 	//ターンを示すアイコン
 	ImageIcon myturnIcon = new ImageIcon("icons/yourturn.png");
-	ImageIcon yourturnIcon = new ImageIcon("icons/rivalturn.png");
+	ImageIcon rivalTurnIcon = new ImageIcon("icons/rivalturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
 
-	//ターンカウントの中身
-	JLabel tComment = new JLabel();
-
-	//ログの中身
+	//ログ
 	JLabel strow1 = new JLabel();
 	JLabel strow2 = new JLabel();
 	JLabel strow3 = new JLabel();
@@ -128,7 +125,27 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				c.add(imturnLabel);
 				imturnLabel.setBounds(180,540,126,36);
 				//imturnLabel.setOpaque(true);
-				imturnLabel.setIcon(yourturnIcon);
+				imturnLabel.setIcon(rivalTurnIcon);
+
+				//オオカミ
+				wolfIcon = new ImageIcon("icons/wolf.png");
+				JLabel wolfLab = new JLabel(wolfIcon);
+				c.add(wolfLab);
+
+				//小さいアイコン
+				wmicon = new ImageIcon("icons/wolf-mini.png");
+				JLabel wolfminiLab = new JLabel(wmicon);
+				c.add(wolfminiLab);
+
+				//あかずきん
+				redHoodIcon = new ImageIcon("icons/redhood.png");
+				JLabel redHoodLab = new JLabel(redHoodIcon);
+				c.add(redHoodLab);
+
+				//小さいアイコン
+				rmicon = new ImageIcon("icons/redhood-mini.png");
+				JLabel redminilab = new JLabel(rmicon);
+				c.add(redminilab);
 
 				if(myNumberInt % 2 == 0){
 					myColor = 0;
@@ -136,33 +153,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					yourIcon = redIcon;
 					setTurn();
 
-					////////////////////////////////////あなたはオオカミ///////////////////
-					wolfIcon = new ImageIcon("icons/wolf.png");
-					JLabel wolfLab = new JLabel(wolfIcon);
-					c.add(wolfLab);
+					//あなたはオオカミ
 					wolfLab.setBounds(180,410,125,125);
-					//wolfLab.setOpaque(true);
-
-					//小さいアイコン
-					wmicon = new ImageIcon("icons/wolf-mini.png");
-					JLabel wolfminiLab = new JLabel(wmicon);
-					c.add(wolfminiLab);
 					wolfminiLab.setBounds(365,10,50,50);
-					//wolfLab.setOpaque(true);
 
 					//あいてはあかずきん
-					redHoodIcon = new ImageIcon("icons/redhood.png");
-					JLabel redHoodLab = new JLabel(redHoodIcon);
-					c.add(redHoodLab);
 					redHoodLab.setBounds(30,410,125,125);
-					//redHoodLab.setOpaque(true);
-
-					//小さいアイコン
-					rmicon = new ImageIcon("icons/redhood-mini.png");
-					JLabel redminilab = new JLabel(rmicon);
-					c.add(redminilab);
 					redminilab.setBounds(365,340,50,50);
-					//wolfLab.setOpaque(true);
 
 				} else {
 					myColor = 1;
@@ -171,34 +168,12 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					setTurn();
 
 					//あなたはあかずきん
-					redHoodIcon = new ImageIcon("icons/redhood.png");
-					JLabel redHoodLab = new JLabel(redHoodIcon);
-					c.add(redHoodLab);
 					redHoodLab.setBounds(180,410,125,125);
-					//redHoodLab.setOpaque(true);
-
-					//小さいアイコン
-					rmicon = new ImageIcon("icons/redhood-mini.png");
-					JLabel redminilab = new JLabel(rmicon);
-					c.add(redminilab);
 					redminilab.setBounds(365,10,50,50);
-					//wolfLab.setOpaque(true);
 
 					//あなたはオオカミ
-					wolfIcon = new ImageIcon("icons/wolf.png");
-					JLabel wolfLab = new JLabel(wolfIcon);
-					c.add(wolfLab);
 					wolfLab.setBounds(30,410,125,125);
-					//wolfLab.setOpaque(true);
-
-					//小さいアイコン
-					wmicon = new ImageIcon("icons/wolf-mini.png");
-					JLabel wolfminiLab = new JLabel(wmicon);
-					c.add(wolfminiLab);
 					wolfminiLab.setBounds(365,340,50,50);
-					//wolfLab.setOpaque(true);
-
-					//////////////////////////////////////////////////////////////////////
 
 				}
 				//背景画像は最後に定義する
@@ -326,10 +301,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int theColor = Integer.parseInt(inputTokens[1]);//myColor
 							if(theColor == myColor){
 								//System.out.println("あなたの負けです");
-								tComment.setText("あなたの負けです");
+								comrow1.setText("あなたの負けです");
 							} else {
 								//System.out.println("あなたの勝ちです");
-								tComment.setText("あなたの勝ちです");
+								comrow1.setText("あなたの勝ちです");
 							}
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
@@ -385,7 +360,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 			repaint();//画面のオブジェクトを描画し直す
 
-		} else if(theIcon.equals(passIcon)){
+		} else if(theIcon.equals(pactiveIcon)){ //passではなくpactiveに注意
 				Icon whichTurn = imturnLabel.getIcon();
 				String msg = "PASS" + " " + myTurn + " " + myColor;
 				//サーバに情報を送る
@@ -397,7 +372,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					System.out.println("相手のターンにはパスできません");
 				}
 
-		} else if(theIcon.equals(resetIcon)){
+		} else if(theIcon.equals(ractiveIcon)){
 				/*String msg = "RESET"+ " " + myColor;
 				//サーバに情報を送る
 				out.println(msg);
@@ -719,21 +694,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		ractiveButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
 		//resetButton.setBorderPainted(false);
 
-		/*//ターンカウントの中身
-		//JLabel tComment = new JLabel();  ほかでも使うので先頭で定義。
-		c.add(tComment);
-		tComment.setBounds(630,505,200,60);
-		tComment.setText("今は" + TurnCount + "ターン目です");
-		tComment.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 20));
-		tComment.setForeground(Color.white);
-
-		//ターンカウントの下地
-		ImageIcon tConIcon = new ImageIcon("images/count.png");
-		JLabel tConBack = new JLabel(tConIcon);
-		c.add(tConBack);
-		tConBack.setBounds(620,505,200,60);
-		tConBack.setOpaque(true);*/
-
 	}
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -792,8 +752,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	}
 
 	public void setTurn(){
-		//初回の処理
 		if(myTurn == 3){
+			//////初回の処理 いじらなくてok////////////////////////////////////////////
 			if(myIcon.equals(whiteIcon)){
 				imturnLabel.setIcon(myturnIcon);
 				//あなたのアイコンのすぐ下に
@@ -801,19 +761,53 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				//初回のガイド表示
 				guide();
 			} else {
-				imturnLabel.setIcon(yourturnIcon);
+				imturnLabel.setIcon(rivalTurnIcon);
 				imturnLabel.setBounds(30,540,126,36);
 			}
+		///////////////////////////////////////////////////////////////////////////
 		} else {
 			//二回目以降の処理
 			Icon whichTurn = imturnLabel.getIcon();
-			System.out.println(whichTurn);
+			//System.out.println(whichTurn);
 			if(whichTurn.equals(myturnIcon)){
-				imturnLabel.setIcon(yourturnIcon);
-				imturnLabel.setBounds(30,540,126,36);
+
+				imturnLabel.setLocation(180, 540 );//初期化
+				Timer timer = new Timer(false);
+				TimerTask task = new TimerTask() {
+
+					int cnt=0;
+
+					@Override
+					public void run() {
+						imturnLabel.setLocation(imturnLabel.getX() - 3, 540 );
+						cnt++;
+						//5回実行で停止
+						if ( cnt >= 50 ) timer.cancel();
+					}
+				};
+				//初期ディレイとインターバル
+				timer.schedule(task, 0, 1);
+				imturnLabel.setIcon(rivalTurnIcon);
+
 			} else {
+
+				imturnLabel.setLocation(30, 540 );//初期化
+				Timer timer = new Timer(false);
+				TimerTask task = new TimerTask() {
+
+					int cnt=0;
+
+					@Override
+					public void run() {
+						imturnLabel.setLocation(imturnLabel.getX() + 3, 540 );
+						cnt++;
+						//5回実行で停止
+						if ( cnt >= 50 ) timer.cancel();
+					}
+				};
+				//初期ディレイとインターバル
+				timer.schedule(task, 0, 1);
 				imturnLabel.setIcon(myturnIcon);
-				imturnLabel.setBounds(180,540,126,36);
 			}
 		}
 	}
@@ -937,7 +931,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//System.out.println("endTurnが呼ばれた");
 		setTurn(); //あなたorあいてのターンです（ラベル切り替え）
 		TurnCount++; //ターンカウントを増やす
-		tComment.setText("今は" + TurnCount + "ターン目です"); //ラベルのセット
+		comrow1.setText("今は" + TurnCount + "ターン目です"); //ラベルのセット
 		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
 		tellStory(TurnCount);
 	}
@@ -947,11 +941,11 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		if(guideCount == 0){
 			countSub = myIconCount - yourIconCount;
 			if(countSub > 0){
-				tComment.setText("あなたの勝ち！");
+				comrow1.setText("あなたの勝ち！");
 			} else if(countSub==0){
-				tComment.setText("引き分け！");
+				comrow1.setText("引き分け！");
 			} else {
-				tComment.setText("あなたの負け！");
+				comrow1.setText("あなたの負け！");
 			}
 		}
 	}
