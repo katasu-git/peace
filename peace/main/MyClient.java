@@ -8,6 +8,13 @@ import javax.swing.*;
 import java.util.*;
 import java.awt.Color;
 
+//枠線
+import javax.swing.border.LineBorder;
+import java.awt.Container;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Insets;
+
 import java.io.File;//音楽再生時に必要
 import javax.sound.sampled.AudioFormat;//音楽再生時に必要
 import javax.sound.sampled.AudioSystem;//音楽再生時に必要
@@ -22,7 +29,7 @@ import java.util.TimerTask;
 public class MyClient extends JFrame implements MouseListener,MouseMotionListener {
 	private JButton buttonArray[][];//ボタン用の配列
 	private Container c;
-	private ImageIcon whiteIcon, redIcon, boardIcon,pactiveIcon,
+	private ImageIcon whiteIcon, redIcon, boardIcon,pactiveIcon,ractiveIcon,
 			passIcon, resetIcon, guideIcon, redHoodIcon, wolfIcon, wmicon, rmicon;
 	private int myColor;
 	private int myTurn = 3; //myTurn==3のとき初期ターンとする。myTurn==0は黒、1は白。
@@ -30,7 +37,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private int flipNum = 0;
 	private int TurnCount = 0;
 	PrintWriter out;//出力用のライター
-	private JButton passButton, resetButton, pactiveButton;
+	private JButton passButton, resetButton, pactiveButton, ractiveButton;
 	private int myIconCount = 2, yourIconCount = 2, countSub =0;
 	private String chara = "";
 	int guideCount = 0;
@@ -438,10 +445,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		///////////////////////////////////////////////////////////////////////
 		} else	if (theIcon.equals(passIcon)){
-			//passIcon = new ImageIcon("icons/pass-active.png");
-			//System.out.println("入った");
+			//重ねておいて表示・非表示を切り替える
 			passButton.setVisible(false);
 			pactiveButton.setVisible(true);
+		} else if (theIcon.equals(resetIcon)){
+			//重ねておいて表示・非表示を切り替える
+			resetButton.setVisible(false);
+			ractiveButton.setVisible(true);
 		}
 	}
 
@@ -457,6 +467,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			//System.out.println("出た");
 			passButton.setVisible(true);
 			pactiveButton.setVisible(false);
+		} else if (theIcon.equals(ractiveIcon)){
+			//System.out.println("出た");
+			resetButton.setVisible(true);
+			ractiveButton.setVisible(false);
 		}
 	}
 
@@ -579,6 +593,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		passIcon = new ImageIcon("icons/pass.png");
 		pactiveIcon = new ImageIcon("icons/pactive.png");
 		resetIcon = new ImageIcon("icons/reset.png");
+		ractiveIcon= new ImageIcon("icons/reset-active.png");
 		guideIcon = new ImageIcon("icons/g-icon.png");
 
 		c.setLayout(null);//自動レイアウトの設定を行わない
@@ -667,18 +682,20 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		passButton.setOpaque(true);
 		passButton.addMouseListener(this);
 		passButton.setContentAreaFilled(false);
-		passButton.setBorderPainted(false);
-		//passButton.setVisible(false);
+		passButton.setVisible(true);
+		passButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
+		//passButton.setBorderPainted(false);
 
-		//パスボタン
+		//アクティブ状態
 		pactiveButton = new JButton(pactiveIcon);
 		c.add(pactiveButton);
 		pactiveButton.setBounds(550,390,100,100);
 		pactiveButton.setOpaque(true);
 		pactiveButton.addMouseListener(this);
 		pactiveButton.setContentAreaFilled(false);
-		pactiveButton.setBorderPainted(false);
 		pactiveButton.setVisible(false);
+		pactiveButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
+		//pactiveButton.setBorderPainted(false);
 
 		//resetボタン
 		resetButton = new JButton(resetIcon);
@@ -687,6 +704,19 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		resetButton.setOpaque(true);
 		resetButton.addMouseListener(this);
 		resetButton.setContentAreaFilled(false);
+		resetButton.setVisible(true);
+		resetButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
+		//resetButton.setBorderPainted(false);
+
+		//アクティブ状態
+		ractiveButton = new JButton(ractiveIcon);
+		c.add(ractiveButton);
+		ractiveButton.setBounds(680,390,100,100);
+		ractiveButton.setOpaque(true);
+		ractiveButton.addMouseListener(this);
+		ractiveButton.setContentAreaFilled(false);
+		ractiveButton.setVisible(false);
+		ractiveButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
 		//resetButton.setBorderPainted(false);
 
 		/*//ターンカウントの中身
