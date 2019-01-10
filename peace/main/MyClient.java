@@ -161,6 +161,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//あいてはあかずきん
 					redHoodLab.setBounds(30,410,125,125);
 					redminilab.setBounds(365,340,50,50);
+					
+					comrow1.setText("     " + "キミはオオカミ");
 
 				} else {
 					myColor = 1;
@@ -175,6 +177,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//あなたはオオカミ
 					wolfLab.setBounds(30,410,125,125);
 					wolfminiLab.setBounds(365,340,50,50);
+					
+					comrow1.setText("アナタはあかずきん");
 
 				}
 				//背景画像は最後に定義する
@@ -634,14 +638,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		strow4.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow1);
-		comrow1.setBounds(388,412,200,100);
-		comrow1.setText("こめんとだお");
+		comrow1.setBounds(370,412,200,100);
 		comrow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
 		comrow1.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow2);
 		comrow2.setBounds(388,452,200,100);
-		comrow2.setText("にぎょうめだお");
+		comrow2.setText("唐突なメタ発言");
 		comrow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
 		comrow2.setForeground(new Color(192,191,191,255));
 
@@ -872,7 +875,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 
 	}
-
+	
+	//ストーリーを進めます
 	public void tellStory(int tCon){
 
 		switch(tCon){
@@ -880,21 +884,25 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			strow1.setText("むかし、それまでに誰も見たことがない"); //初期設定では一行で20文字です
 			strow2.setText("ほどきれいな、女の子がいました。");
 			strow3.setText("");
+			strow4.setText("");
 			break;
 		case 2:
-			strow1.setText("この子に夢中なおばあさんが赤いずきんを");
-			strow2.setText("作らせましたが、それがよく似合ったので");
-			strow3.setText("どこへ行っても「赤ずきんちゃん」と呼ばれました。");
+			strow1.setText("この子に夢中なおばあさんが");
+			strow2.setText("赤いずきんを作らせましたが");
+			strow3.setText("それがよく似合ったので");
+			strow4.setText("「赤ずきんちゃん」と呼ばれました。");
 			break;
 		case 3:
 			strow1.setText("ある日、母親は女の子にいいました。");
-			strow2.setText("「おばあさんが病気だそうだから、どんな具合か");
-			strow3.setText("見ておいで。このガレットとバターの壺をもってね」");
+			strow2.setText("「おばあさんが病気だそうだから");
+			strow3.setText("どんな具合か見ておいで。");
+			strow4.setText("このガレットとバターの壺をもってね」");
 			break;
 		case 4:
-			strow1.setText("赤ずきんちゃんは別の村に住むおばあさんの");
-			strow2.setText("所へ向かって、すぐに出かけました。");
-			strow3.setText("");
+			strow1.setText("赤ずきんちゃんは別の村に住む");
+			strow2.setText("おばあさんの所へ向かって");
+			strow3.setText("すぐに出かけました。");
+			strow4.setText("");
 			break;
 		//ここから分岐
 		case 5:
@@ -903,11 +911,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				strow1.setText("あなたが森を少し歩いていると、");
 				strow2.setText("おおかみが声をかけてきました。");
 				strow3.setText("");
+				strow4.setText("");
 			}else {
 				//おおかみ視点
 				strow1.setText("いつものように「えさ」を探していると");
-				strow2.setText("赤いずきんをかぶった女の子を見つけました。");
-				strow3.setText("あなたは声をかけることにしました。");
+				strow2.setText("赤いずきんをかぶった");
+				strow3.setText("女の子を見つけました。");
+				strow4.setText("あなたは声をかけることにしました。");
 			}
 			break;
 		case 6:
@@ -916,11 +926,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				strow1.setText("「どこへ行くの？」");
 				strow2.setText("「おばあさんのおうちはどこ？」");
 				strow3.setText("");
+				strow4.setText("");
 			}else {
 				//おおかみ視点
 				strow1.setText("「どこへ行くの？」");
 				strow2.setText("「おばあさんのおうちはどこ？」");
 				strow3.setText("");
+				strow4.setText("");
 			}
 			break;
 		}
