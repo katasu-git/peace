@@ -300,10 +300,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							//リセットボタンが押されたときの処理
 							
 							//ダイアログのテスト
-							testDialog();
+							//testDialog();
 						} else if(cmd.equals("JUDGE")){
 							int win = Integer.parseInt(inputTokens[1]);//guideCount
-							testDialog();
+							if(win == 0){
+								testDialog();
+							} else if(win == 1){
+								testDialog();
+							} else {
+								testDialog();
+							}
+							//強制終了の処理
+							System.exit(0);
 							
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
@@ -537,20 +545,6 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 		}
 		return flipNum;
-	}
-
-	public static void setFlame() {
-		JFrame frame = new JFrame();
-		// タイトル名を設定
-		frame.setTitle( "背景色を赤色に" );
-		// フレームの大きさを設定
-		frame.setSize( 400, 320 );
-		// ”×”ボタンを押した時の処理を設定
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		// 背景色の変更
-		frame.getContentPane().setBackground( Color.RED );
-		// フレームを表示
-		frame.setVisible( true );
 	}
 
 	///////////////////////////////////////////UIの生成////////////////////////////
@@ -955,11 +949,16 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("あなたの負け！");
 				winner = 0;
 			}
-			String msg = "JUDGE"+ " " + winner;
-			//サーバに情報を送る
-			out.println(msg);
-			out.flush();
-			repaint();
+			
+			//if文がないと2重に送信されます
+			Icon whichTurn = imturnLabel.getIcon();
+			if(whichTurn.equals(myturnIcon)){
+				String msg = "JUDGE"+ " " + winner;
+				//サーバに情報を送る
+				out.println(msg);
+				out.flush();
+				repaint();
+			}
 		}
 	}
 
@@ -1079,7 +1078,7 @@ class WinDialogWindow extends JDialog implements ActionListener{
         theButton.addActionListener(this);//ボタンをクリックしたときにactionPerformedで受け取るため
         c.add(theButton);//ダイアログに貼り付ける（貼り付けないと表示されない
 
-        setTitle("You Win!");//タイトルの設定
+        setTitle("");//タイトルの設定
         setSize(526, 234);//大きさの設定
         setResizable(false);//拡大縮小禁止//trueにすると拡大縮小できるようになる
         setUndecorated(true); //タイトルを表示しない
@@ -1090,6 +1089,8 @@ class WinDialogWindow extends JDialog implements ActionListener{
         setLocation(owner.getBounds().x+owner.getWidth()/2-this.getWidth()/2,owner.getBounds().y+owner.getHeight()/2-this.getHeight()/2);
         setVisible(true);
     }
+	
+	//ボタンが押されたときの処理
     public void actionPerformed(ActionEvent e) {
         this.dispose();//Dialogを廃棄する
     }
