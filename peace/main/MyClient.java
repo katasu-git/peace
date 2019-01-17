@@ -355,7 +355,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			//System.out.println("tempx = " + tempx + "tempy = " + tempy);
 			if(judgeButton(tempy, tempx)){
 				//おける
-				Icon whichTurn = imturnLabel.getIcon();
+				
+				/*Icon whichTurn = imturnLabel.getIcon();
 				if(whichTurn.equals(myturnIcon)){
 					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
 					//サーバに情報を送る
@@ -364,15 +365,28 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					repaint();
 				} else {
 					System.out.println("相手のターンには置けません");
+				}*/
+				
+				if(getWhichTurn()){
+					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
+					//サーバに情報を送る
+					out.println(msg);
+					out.flush();
+					repaint();
+				} else {
+					//System.out.println("相手のターンには置けません");
+					playSound("sounds/cantPlace.wav");
 				}
 
 			} else {
 				//置けない
+				playSound("sounds/cantPlace.wav");
 			}
 			repaint();//画面のオブジェクトを描画し直す
 
 		} else if(theIcon.equals(pactiveIcon)){ //passではなくpactiveに注意
-				Icon whichTurn = imturnLabel.getIcon();
+				
+				/*Icon whichTurn = imturnLabel.getIcon();
 				String msg = "PASS" + " " + myTurn + " " + myColor;
 				//サーバに情報を送る
 				if(whichTurn.equals(myturnIcon)){
@@ -381,7 +395,19 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				repaint();
 				} else {
 					System.out.println("相手のターンにはパスできません");
+				}*/
+				
+				if(getWhichTurn()){
+					String msg = "PASS" + " " + myTurn + " " + myColor;
+					//サーバに情報を送る
+					out.println(msg);
+					out.flush();
+					repaint();
+				} else {
+					//System.out.println("相手のターンにはパスできません");
+					playSound("sounds/cantPlace.wav");
 				}
+				
 
 		} else if(theIcon.equals(ractiveIcon)){
 				String msg = "RESET"+ " " + myColor;
@@ -427,9 +453,11 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		if(theIcon.equals(boardIcon) || theIcon.equals(guideIcon) || theIcon.equals(redIcon) ||theIcon.equals(whiteIcon)){
 
 		///////////////////////////////////////////////////////////////////////
-		theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
+		/*theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
 		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
-		theSoundPlayer1.play();
+		theSoundPlayer1.play();*/
+		
+		playSound("sounds/kot.wav");
 
 		///////////////////////////////////////////////////////////////////////
 		} else	if (theIcon.equals(passIcon)){
@@ -492,8 +520,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int msgy = y + dy;
 							int msgx = x + dx;
 							int theArrayIndex = msgx*8 + msgy;
-							Icon whichTurn = imturnLabel.getIcon();
-
+							
+							/*Icon whichTurn = imturnLabel.getIcon();
 							//自分のターンのときだけフリップ送信
 							if(whichTurn.equals(myturnIcon)){
 								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
@@ -502,7 +530,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 								repaint();
 							} else {
 								System.out.println("相手のターンには裏返せません");
+							}*/
+							
+							if(getWhichTurn()){
+								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
+								out.println(msg);
+								out.flush();
+								repaint();
+							} else {
+								//System.out.println("相手のターンには裏返せません");
+								playSound("sounds/cantPlace.wav");
 							}
+							
 						}
 					} else { //ひとつも裏返せない
 						//System.out.println("ひとつも裏返せない"); //デバック
@@ -600,7 +639,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		pointcon.setText(" " + Integer.toString(countSub));
 		pointcon.setForeground(Color.decode("#c0bfbf"));
 		//pointcon.setOpaque(true); //背景透明化
-		pointcon.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 18));
+		pointcon.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 18));
 
 		//ポインター ほかから使うので外で宣言
 		c.add(pointerLabel);
@@ -612,21 +651,21 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		c.add(strow1);
 		strow1.setBounds(20,-10,300,300);
 		strow1.setText("初期のテキストです。初期のテキスト。");
-		strow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		strow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow1.setForeground(new Color(192,191,191,255));
 
 		//JLabel strow2 = new JLabel();
 		c.add(strow2);
 		strow2.setBounds(20,50,300,300);
 		strow2.setText("初期のテキストです。初期のテキスト。");
-		strow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		strow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow2.setForeground(new Color(192,191,191,255));
 
 		//JLabel strow3 = new JLabel();
 		c.add(strow3);
 		strow3.setBounds(20,110,300,300);
 		strow3.setText("初期のテキストです。初期のテキスト。");
-		strow3.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		strow3.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow3.setForeground(new Color(192,191,191,255));
 
 		//JLabel strow4 = new JLabel();
@@ -634,18 +673,18 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		c.add(strow4);
 		strow4.setBounds(20,170,300,300);
 		strow4.setText("初期のテキストです。初期。");
-		strow4.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		strow4.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow4.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow1);
 		comrow1.setBounds(370,412,200,100);
-		comrow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		comrow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		comrow1.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow2);
 		comrow2.setBounds(388,452,200,100);
 		comrow2.setText("唐突なメタ発言");
-		comrow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.PLAIN, 16));
+		comrow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		comrow2.setForeground(new Color(192,191,191,255));
 
 		//パスボタン
@@ -881,70 +920,207 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 		switch(tCon){
 		case 1:
-			strow1.setText("むかし、それまでに誰も見たことがない"); //初期設定では一行で20文字です
-			strow2.setText("ほどきれいな、女の子がいました。");
-			strow3.setText("");
+		
+			//共通部分
+			strow1.setText(""); //初期設定では一行で20文字です
+			strow2.setText("むかし、それまでに誰も見たことがない");
+			strow3.setText("ほどきれいな、女の子がいました。");
 			strow4.setText("");
+			
+			//それぞれのコメント
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("オレの出番はまだか");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("ワタシ美人なの");
+				comrow2.setText("");
+			}
+			
 			break;
 		case 2:
 			strow1.setText("この子に夢中なおばあさんが");
 			strow2.setText("赤いずきんを作らせましたが");
 			strow3.setText("それがよく似合ったので");
 			strow4.setText("「赤ずきんちゃん」と呼ばれました。");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("ハラがへった");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("ホントの");
+				comrow2.setText("なまえはヒミツ");
+			}
+			
 			break;
 		case 3:
 			strow1.setText("ある日、母親は女の子にいいました。");
 			strow2.setText("「おばあさんが病気だそうだから");
 			strow3.setText("どんな具合か見ておいで。");
 			strow4.setText("このガレットとバターの壺をもってね」");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("さっさと");
+				comrow2.setText("食っちまおう");
+			} else {
+				//あかずきん
+				comrow1.setText("はじめての");
+				comrow2.setText("おつかいよね");
+			}
+			
 			break;
 		case 4:
 			strow1.setText("赤ずきんちゃんは別の村に住む");
 			strow2.setText("おばあさんの所へ向かって");
 			strow3.setText("すぐに出かけました。");
 			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("いよいよだな");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("いってきまーす");
+				comrow2.setText("");
+			}
+			
 			break;
+			
 		//ここから分岐
 		case 5:
-			if(myIcon == redIcon){
-				//赤ずきん視点
-				strow1.setText("あなたが森を少し歩いていると、");
-				strow2.setText("おおかみが声をかけてきました。");
-				strow3.setText("");
-				strow4.setText("");
-			}else {
-				//おおかみ視点
-				strow1.setText("いつものように「えさ」を探していると");
-				strow2.setText("赤いずきんをかぶった");
-				strow3.setText("女の子を見つけました。");
-				strow4.setText("あなたは声をかけることにしました。");
+			strow1.setText("赤ずきんちゃんが森に入ると");
+			strow2.setText("オオカミが出てきます");
+			strow3.setText("オオカミはこの子を");
+			strow4.setText("食べたくなりました");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("うまそうな");
+				comrow2.setText("ムスメだ");
+			} else {
+				//あかずきん
+				comrow1.setText("ちょっとクサイ");
+				comrow2.setText("");
 			}
+			
 			break;
+			
 		case 6:
-			if(myIcon == redIcon){
-				//赤ずきん視点
-				strow1.setText("「どこへ行くの？」");
-				strow2.setText("「おばあさんのおうちはどこ？」");
-				strow3.setText("");
-				strow4.setText("");
-			}else {
-				//おおかみ視点
-				strow1.setText("「どこへ行くの？」");
-				strow2.setText("「おばあさんのおうちはどこ？」");
-				strow3.setText("");
-				strow4.setText("");
+			strow1.setText("どこへ行くのか");
+			strow2.setText("家はどこかなどときかれて");
+			strow3.setText("赤ずきんは");
+			strow4.setText("ありのままを答えます");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("まぁ興味ないが");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("へんなひと");
+				comrow2.setText("あ、オオカミか");
 			}
 			break;
+			
+		case 7:
+			strow1.setText("オオカミは言いました");
+			strow2.setText("「オレもばあさんに会いたい。");
+			strow3.setText("どっちが先に着くか");
+			strow4.setText("競争しよう。」");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("先にばあさんを");
+				comrow2.setText("食べてしまおう");
+			} else {
+				//あかずきん
+				comrow1.setText("こうみえて");
+				comrow2.setText("足は速いの");
+			}
+			break;
+		
+		case 8:
+			strow1.setText("オオカミは近道を");
+			strow2.setText("走っていきましたが");
+			strow3.setText("赤ずきんちゃんは");
+			strow4.setText("遊びながら行きました");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("血のあじがする");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("あんなところに");
+				comrow2.setText("キレイな蝶が");
+			}
+			break;
+		
+		case 9:
+			strow1.setText("オオカミはおばあさんの");
+			strow2.setText("家について、");
+			strow3.setText("「孫の赤ずきんよ」と");
+			strow4.setText("作り声でいいました。");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("ノドがイタイぜ");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("こんなところに");
+				comrow2.setText("きれいなお花が");
+			}
+			break;
+			
+		case 10:
+			strow1.setText("オオカミは家に入り");
+			strow2.setText("おばあさんにとびかかると");
+			strow3.setText("すぐ食べてしまいました");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("なつかしい");
+				comrow2.setText("味がする");
+			} else {
+				//あかずきん
+				comrow1.setText("そろそろ");
+				comrow2.setText("行こうかしら");
+			}
+			break;
+			
+		case 11:
+			strow1.setText("しばらくすると");
+			strow2.setText("赤ずきんちゃんが来て、");
+			strow3.setText("戸をたたきます。");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("何してたんだ");
+				comrow2.setText("アイツ");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
+			
 		}
 	}
 
+	//この手前でmovePointerが動いてるよ！
 	public void endTurn(){
-		//System.out.println("endTurnが呼ばれた");
-		setTurn(); //あなたorあいてのターンです（ラベル切り替え）
+		setTurn(); //ターンのラベル切り替え
 		TurnCount++; //ターンカウントを増やす
-		comrow1.setText("今は" + TurnCount + "ターン目です"); //ラベルのセット
 		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
-		tellStory(TurnCount);
+		tellStory(TurnCount); //ストーリーを進める
 	}
 
 	//勝敗判定です
@@ -963,13 +1139,24 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 			
 			//if文がないと2重に送信されます
-			Icon whichTurn = imturnLabel.getIcon();
+			
+			/*Icon whichTurn = imturnLabel.getIcon();
 			if(whichTurn.equals(myturnIcon)){
 				String msg = "JUDGE"+ " " + winner;
 				//サーバに情報を送る
 				out.println(msg);
 				out.flush();
 				repaint();
+			}*/
+			
+			if(getWhichTurn()){
+				String msg = "JUDGE"+ " " + winner;
+				//サーバに情報を送る
+				out.println(msg);
+				out.flush();
+				repaint();
+			} else {
+				
 			}
 		}
 	}
@@ -1062,6 +1249,33 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	
 	public static int returnWinner(){
 		return winner;
+	}
+	
+	public boolean getWolfOrRed(){
+		if(myColor == 0){
+			//オオカミはtrue
+			return true;
+		} else {
+			//あかずきんはfalse
+			return false;
+		}
+	}
+	
+	//現在自分のターンならtureを返す関数
+	public boolean getWhichTurn(){
+		Icon whichTurn = imturnLabel.getIcon();
+		if(whichTurn.equals(myturnIcon)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//ファイルパスを引数にする
+	public void playSound(String file){
+		theSoundPlayer1 = new SoundPlayer(file);
+		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
+		theSoundPlayer1.play();
 	}
 
 }
