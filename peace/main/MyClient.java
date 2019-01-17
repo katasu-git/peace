@@ -639,7 +639,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		pointcon.setText(" " + Integer.toString(countSub));
 		pointcon.setForeground(Color.decode("#c0bfbf"));
 		//pointcon.setOpaque(true); //背景透明化
-		pointcon.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 18));
+		pointcon.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 15));
 
 		//ポインター ほかから使うので外で宣言
 		c.add(pointerLabel);
@@ -1107,6 +1107,57 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("アイツ");
 			} else {
 				//あかずきん
+				comrow1.setText("やっと");
+				comrow2.setText("ついたわ");
+			}
+			break;
+			
+		case 12:
+			strow1.setText("「どなたかね？」");
+			strow2.setText("という太い声がします。");
+			strow3.setText("おばあさんは風邪を");
+			strow4.setText("引いているのでしょうか。");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("さあ");
+				comrow2.setText("入って来い");
+			} else {
+				//あかずきん
+				comrow1.setText("あんな声");
+				comrow2.setText("だったかしら");
+			}
+			break;
+			
+		case 13:
+			strow1.setText("「赤ずきんよ。");
+			strow2.setText("ガレットとバターの壺を");
+			strow3.setText("もってきたの」");
+			strow4.setText("そう言って中に入りました。");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("食べるのは");
+				comrow2.setText("オマエだよ");
+			} else {
+				//あかずきん
+				comrow1.setText("ふり回したけど");
+				comrow2.setText("大丈夫かな");
+			}
+			break;
+			
+		case 14:
+			strow1.setText("狼はベッドの下に");
+			strow2.setText("かくれたまま、");
+			strow3.setText("こっちへ来ておばあちゃん");
+			strow4.setText("とお休み」と言いました。");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
 				comrow1.setText("");
 				comrow2.setText("");
 			}
@@ -1121,6 +1172,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		TurnCount++; //ターンカウントを増やす
 		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
 		tellStory(TurnCount); //ストーリーを進める
+		comrow1.setText(Integer.toString(TurnCount)); //デバック（ターン数を表示）
 	}
 
 	//勝敗判定です
