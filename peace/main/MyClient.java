@@ -306,7 +306,8 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							//ダイアログのテスト
 							//testDialog();
 						} else if(cmd.equals("JUDGE")){
-							int win = Integer.parseInt(inputTokens[1]);//guideCount
+							//int win = Integer.parseInt(inputTokens[1]);//guideCount
+							int win = whichWin();
 							if(win == 0){
 								testDialog();
 							} else if(win == 1){
@@ -323,7 +324,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							//System.out.println("guideCount = " + guideCount);
 
 							//置けなければ勝敗判定
-							whichWin();
+							if(guideCount == 0) {
+								whichWin();
+							}
+							
 						}
 					}else{
 						break;
@@ -650,21 +654,21 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//JLabel strow1 = new JLabel();
 		c.add(strow1);
 		strow1.setBounds(20,-10,300,300);
-		strow1.setText("初期のテキストです。初期のテキスト。");
+		strow1.setText("ここは共通の");
 		strow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow1.setForeground(new Color(192,191,191,255));
 
 		//JLabel strow2 = new JLabel();
 		c.add(strow2);
 		strow2.setBounds(20,50,300,300);
-		strow2.setText("初期のテキストです。初期のテキスト。");
+		strow2.setText("ストーリーボードです");
 		strow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow2.setForeground(new Color(192,191,191,255));
 
 		//JLabel strow3 = new JLabel();
 		c.add(strow3);
 		strow3.setBounds(20,110,300,300);
-		strow3.setText("初期のテキストです。初期のテキスト。");
+		strow3.setText("物語の進行とともに");
 		strow3.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow3.setForeground(new Color(192,191,191,255));
 
@@ -672,17 +676,17 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		//ここはMAX15文字
 		c.add(strow4);
 		strow4.setBounds(20,170,300,300);
-		strow4.setText("初期のテキストです。初期。");
+		strow4.setText("テキストが変化します");
 		strow4.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		strow4.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow1);
-		comrow1.setBounds(370,412,200,100);
+		comrow1.setBounds(365,412,200,100);
 		comrow1.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		comrow1.setForeground(new Color(192,191,191,255));
 
 		c.add(comrow2);
-		comrow2.setBounds(388,452,200,100);
+		comrow2.setBounds(384,452,200,100);
 		comrow2.setText("唐突なメタ発言");
 		comrow2.setFont(new Font("UD デジタル 教科書体 N-B", Font.BOLD, 16));
 		comrow2.setForeground(new Color(192,191,191,255));
@@ -820,10 +824,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 					@Override
 					public void run() {
-						imturnLabel.setLocation(imturnLabel.getX() - 3, 540 );
+						imturnLabel.setLocation(imturnLabel.getX() - 2, 540 );
 						cnt++;
 						//5回実行で停止
-						if ( cnt >= 50 ) timer.cancel();
+						if ( cnt >= 75 ) timer.cancel();
 					}
 				};
 				//初期ディレイとインターバル
@@ -840,10 +844,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 					@Override
 					public void run() {
-						imturnLabel.setLocation(imturnLabel.getX() + 3, 540 );
+						imturnLabel.setLocation(imturnLabel.getX() + 2, 540 );
 						cnt++;
 						//5回実行で停止
-						if ( cnt >= 50 ) timer.cancel();
+						if ( cnt >= 75 ) timer.cancel();
 					}
 				};
 				//初期ディレイとインターバル
@@ -914,18 +918,185 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 
 	}
+
+	//この手前でmovePointerが動いてるよ！
+	public void endTurn(){
+		setTurn(); //ターンのラベル切り替え
+		TurnCount++; //ターンカウントを増やす
+		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
+		tellStory(TurnCount); //ストーリーを進める
+		//comrow1.setText(Integer.toString(TurnCount)); //デバック（ターン数を表示）
+	}
+
+	//勝敗判定です
+	public int whichWin(){
+		//if(guideCount == 0){
+			countSub = myIconCount - yourIconCount;
+			if(countSub > 0){
+				//comrow1.setText("あなたの勝ち！");
+				winner = 1;
+			} else if(countSub==0){
+				//comrow1.setText("引き分け！");
+				winner = 2;
+			} else {
+				//comrow1.setText("あなたの負け！");
+				winner = 0;
+			}
+			
+			//if文がないと2重に送信されます
+			
+			/*Icon whichTurn = imturnLabel.getIcon();
+			if(whichTurn.equals(myturnIcon)){
+				String msg = "JUDGE"+ " " + winner;
+				//サーバに情報を送る
+				out.println(msg);
+				out.flush();
+				repaint();
+			}*/
+			
+			if(getWhichTurn()){
+				//String msg = "JUDGE"+ " " + winner;
+				String msg = "JUDGE";
+				//サーバに情報を送る
+				out.println(msg);
+				out.flush();
+				repaint();
+			} else {
+				
+			}
+			
+		//}
+		return winner;
+	}
+
+	public class SoundPlayer{
+			private AudioFormat format = null;
+			private DataLine.Info info = null;
+			private Clip clip = null;
+			boolean stopFlag = false;
+			Thread soundThread = null;
+			private boolean loopFlag = false;
+
+			public SoundPlayer(String pathname){
+					File file = new File(pathname);
+					try{
+							format = AudioSystem.getAudioFileFormat(file).getFormat();
+							info = new DataLine.Info(Clip.class, format);
+							clip = (Clip) AudioSystem.getLine(info);
+							clip.open(AudioSystem.getAudioInputStream(file));
+							//clip.setLoopPoints(0,clip.getFrameLength());//無限ループとなる
+					}catch(Exception e){
+							e.printStackTrace();
+					}
+			}
+
+			public void SetLoop(boolean flag){
+					loopFlag = flag;
+			}
+
+			public void play(){
+					soundThread = new Thread(){
+							public void run(){
+									long time = (long)clip.getFrameLength();//44100で割ると再生時間（秒）がでる
+									//System.out.println("PlaySound time="+time);
+									long endTime = System.currentTimeMillis()+time*1000/44100;
+									clip.start();
+									//System.out.println("PlaySound time="+(int)(time/44100));
+									while(true){
+											if(stopFlag){//stopFlagがtrueになった終了
+													System.out.println("PlaySound stop by stopFlag");
+													clip.stop();
+													return;
+											}
+											//System.out.println("endTime="+endTime);
+											//System.out.println("currentTimeMillis="+System.currentTimeMillis());
+											if(endTime < System.currentTimeMillis()){//曲の長さを過ぎたら終了
+													//System.out.println("PlaySound stop by sound length");
+													if(loopFlag) {
+															clip.loop(1);//無限ループとなる
+													} else {
+															clip.stop();
+															return;
+													}
+											}
+											try {
+													Thread.sleep(100);
+											} catch (InterruptedException e) {
+													e.printStackTrace();
+											}
+									}
+							}
+					};
+					soundThread.start();
+			}
+
+			public void stop(){
+					stopFlag = true;
+					//System.out.println("StopSound");
+			}
+
+	}
 	
-	//ストーリーを進めます
+	public void actionPerformed(ActionEvent e) {
+        System.out.println("アクション発生");
+        System.out.println(e.getSource());
+        String theCmd = e.getActionCommand();
+        System.out.println("ActionCommand: "+theCmd);
+
+        //theButton1を押したときに，ダイアログを表示する
+        if(theCmd.equalsIgnoreCase("PUSH_Dialog")){
+            WinDialogWindow dlg = new WinDialogWindow(this);
+            setVisible(true);
+        }
+    }
+	
+	public void testDialog(){
+		WinDialogWindow dlg = new WinDialogWindow(this);
+        setVisible(true);
+	}
+	
+	public static int returnWinner(){
+		return winner;
+	}
+	
+	public boolean getWolfOrRed(){
+		if(myColor == 0){
+			//オオカミはtrue
+			return true;
+		} else {
+			//あかずきんはfalse
+			return false;
+		}
+	}
+	
+	//現在自分のターンならtureを返す関数
+	public boolean getWhichTurn(){
+		Icon whichTurn = imturnLabel.getIcon();
+		if(whichTurn.equals(myturnIcon)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//ファイルパスを引数にする
+	public void playSound(String file){
+		theSoundPlayer1 = new SoundPlayer(file);
+		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
+		theSoundPlayer1.play();
+	}
+	
+	//ストーリーを進める場所です
 	public void tellStory(int tCon){
 
 		switch(tCon){
 		case 1:
 		
 			//共通部分
-			strow1.setText(""); //初期設定では一行で20文字です
-			strow2.setText("むかし、それまでに誰も見たことがない");
-			strow3.setText("ほどきれいな、女の子がいました。");
-			strow4.setText("");
+			strow1.setText("むかし、それまでに"); //初期設定では一行で20文字です
+			strow2.setText("誰も見たことがない");
+			strow3.setText("ほどきれいな");
+			strow4.setText("女の子がいました。");
 			
 			//それぞれのコメント
 			if(getWolfOrRed()){
@@ -943,7 +1114,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			strow1.setText("この子に夢中なおばあさんが");
 			strow2.setText("赤いずきんを作らせましたが");
 			strow3.setText("それがよく似合ったので");
-			strow4.setText("「赤ずきんちゃん」と呼ばれました。");
+			strow4.setText("「赤ずきん」と呼ばれました。");
 			
 			if(getWolfOrRed()){
 				//オオカミ
@@ -957,10 +1128,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			
 			break;
 		case 3:
-			strow1.setText("ある日、母親は女の子にいいました。");
+			strow1.setText("ある日、母が女の子にいいました。");
 			strow2.setText("「おばあさんが病気だそうだから");
 			strow3.setText("どんな具合か見ておいで。");
-			strow4.setText("このガレットとバターの壺をもってね」");
+			strow4.setText("ガレットとバターをもってね」");
 			
 			if(getWolfOrRed()){
 				//オオカミ
@@ -1162,47 +1333,131 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
+		
+		case 15:
+			strow1.setText("赤ずきんは服を脱ぎ");
+			strow2.setText("ベッドの下に入ろうとしますが");
+			strow3.setText("おばあさんの姿を見て");
+			strow4.setText("とても驚きます。");
 			
-		}
-	}
-
-	//この手前でmovePointerが動いてるよ！
-	public void endTurn(){
-		setTurn(); //ターンのラベル切り替え
-		TurnCount++; //ターンカウントを増やす
-		guide(); //ガイドの作成+置ける場所の判定（なければ終了）
-		tellStory(TurnCount); //ストーリーを進める
-		comrow1.setText(Integer.toString(TurnCount)); //デバック（ターン数を表示）
-	}
-
-	//勝敗判定です
-	public void whichWin(){
-		if(guideCount == 0){
-			countSub = myIconCount - yourIconCount;
-			if(countSub > 0){
-				comrow1.setText("あなたの勝ち！");
-				winner = 1;
-			} else if(countSub==0){
-				comrow1.setText("引き分け！");
-				winner = 2;
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
 			} else {
-				comrow1.setText("あなたの負け！");
-				winner = 0;
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
 			}
+			break;
 			
-			//if文がないと2重に送信されます
+		case 16:
+			strow1.setText("「おばあちゃん、なんて大きな");
+			strow2.setText("腕をしてるの？」");
+			strow3.setText("「おまえを上手に");
+			strow4.setText("抱けるようにだよ」");
 			
-			/*Icon whichTurn = imturnLabel.getIcon();
-			if(whichTurn.equals(myturnIcon)){
-				String msg = "JUDGE"+ " " + winner;
-				//サーバに情報を送る
-				out.println(msg);
-				out.flush();
-				repaint();
-			}*/
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
 			
+		case 17:
+			strow1.setText("「おばあちゃん、なんて大きな");
+			strow2.setText("脚をしてるの？」");
+			strow3.setText("「速く走れるようにだよ」");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
+			
+		case 18:
+			strow1.setText("「おばあちゃん、なんて大きな");
+			strow2.setText("耳をしてるの？」");
+			strow3.setText("「よく聞こえるようにだよ」");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
+			
+		case 19:
+			strow1.setText("「おばあちゃん、なんて大きな");
+			strow2.setText("目をしてるの？」");
+			strow3.setText("「よく見えるようにだよ」");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
+			
+		case 20:
+			strow1.setText("「おばあちゃん、なんて大きな");
+			strow2.setText("歯をしてるの？」");
+			strow3.setText("「おまえを食べるためさ」");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			break;
+			
+		case 21:
+			strow1.setText("この悪いオオカミは");
+			strow2.setText("赤ずきんちゃんにとびかかり、");
+			strow3.setText("食べてしまいました。");
+			strow4.setText("");
+			
+			if(getWolfOrRed()){
+				//オオカミ
+				comrow1.setText("");
+				comrow2.setText("");
+			} else {
+				//あかずきん
+				comrow1.setText("");
+				comrow2.setText("");
+			}
+			//最後のところは抜けて終了処理へ
+			//break;
+			
+		case 100:
+			//終了処理
 			if(getWhichTurn()){
-				String msg = "JUDGE"+ " " + winner;
+				String msg = "JUDGE";
 				//サーバに情報を送る
 				out.println(msg);
 				out.flush();
@@ -1210,124 +1465,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			} else {
 				
 			}
+			break;
+			
 		}
-	}
-
-	public class SoundPlayer{
-			private AudioFormat format = null;
-			private DataLine.Info info = null;
-			private Clip clip = null;
-			boolean stopFlag = false;
-			Thread soundThread = null;
-			private boolean loopFlag = false;
-
-			public SoundPlayer(String pathname){
-					File file = new File(pathname);
-					try{
-							format = AudioSystem.getAudioFileFormat(file).getFormat();
-							info = new DataLine.Info(Clip.class, format);
-							clip = (Clip) AudioSystem.getLine(info);
-							clip.open(AudioSystem.getAudioInputStream(file));
-							//clip.setLoopPoints(0,clip.getFrameLength());//無限ループとなる
-					}catch(Exception e){
-							e.printStackTrace();
-					}
-			}
-
-			public void SetLoop(boolean flag){
-					loopFlag = flag;
-			}
-
-			public void play(){
-					soundThread = new Thread(){
-							public void run(){
-									long time = (long)clip.getFrameLength();//44100で割ると再生時間（秒）がでる
-									//System.out.println("PlaySound time="+time);
-									long endTime = System.currentTimeMillis()+time*1000/44100;
-									clip.start();
-									//System.out.println("PlaySound time="+(int)(time/44100));
-									while(true){
-											if(stopFlag){//stopFlagがtrueになった終了
-													System.out.println("PlaySound stop by stopFlag");
-													clip.stop();
-													return;
-											}
-											//System.out.println("endTime="+endTime);
-											//System.out.println("currentTimeMillis="+System.currentTimeMillis());
-											if(endTime < System.currentTimeMillis()){//曲の長さを過ぎたら終了
-													//System.out.println("PlaySound stop by sound length");
-													if(loopFlag) {
-															clip.loop(1);//無限ループとなる
-													} else {
-															clip.stop();
-															return;
-													}
-											}
-											try {
-													Thread.sleep(100);
-											} catch (InterruptedException e) {
-													e.printStackTrace();
-											}
-									}
-							}
-					};
-					soundThread.start();
-			}
-
-			public void stop(){
-					stopFlag = true;
-					//System.out.println("StopSound");
-			}
-
-	}
-	
-	public void actionPerformed(ActionEvent e) {
-        System.out.println("アクション発生");
-        System.out.println(e.getSource());
-        String theCmd = e.getActionCommand();
-        System.out.println("ActionCommand: "+theCmd);
-
-        //theButton1を押したときに，ダイアログを表示する
-        if(theCmd.equalsIgnoreCase("PUSH_Dialog")){
-            WinDialogWindow dlg = new WinDialogWindow(this);
-            setVisible(true);
-        }
-    }
-	
-	public void testDialog(){
-		WinDialogWindow dlg = new WinDialogWindow(this);
-        setVisible(true);
-	}
-	
-	public static int returnWinner(){
-		return winner;
-	}
-	
-	public boolean getWolfOrRed(){
-		if(myColor == 0){
-			//オオカミはtrue
-			return true;
-		} else {
-			//あかずきんはfalse
-			return false;
-		}
-	}
-	
-	//現在自分のターンならtureを返す関数
-	public boolean getWhichTurn(){
-		Icon whichTurn = imturnLabel.getIcon();
-		if(whichTurn.equals(myturnIcon)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	//ファイルパスを引数にする
-	public void playSound(String file){
-		theSoundPlayer1 = new SoundPlayer(file);
-		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
-		theSoundPlayer1.play();
 	}
 
 }
