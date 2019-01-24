@@ -55,6 +55,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	ImageIcon myturnIcon = new ImageIcon("icons/yourturn.png");
 	ImageIcon rivalTurnIcon = new ImageIcon("icons/rivalturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
+	
+	//暗転用の画像
+	static ImageIcon back90Icon = new ImageIcon("icons/background90.png");
+	static JLabel back90 = new JLabel(back90Icon);
 
 	//ログ
 	JLabel strow1 = new JLabel();
@@ -326,6 +330,15 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							//置けなければ勝敗判定
 							if(guideCount == 0) {
 								whichWin();
+								if(getWhichTurn()){
+									String msg = "JUDGE";
+									//サーバに情報を送る
+									out.println(msg);
+									out.flush();
+									repaint();
+								} else {
+								
+								}
 							}
 							
 						}
@@ -612,6 +625,11 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		resetIcon = new ImageIcon("icons/reset.png");
 		ractiveIcon= new ImageIcon("icons/reset-active.png");
 		guideIcon = new ImageIcon("icons/g-icon.png");
+		
+		//暗転用の画像
+		c.add(back90);
+		back90.setBounds(0,0,800,600);
+		back90.setVisible(false);
 
 		c.setLayout(null);//自動レイアウトの設定を行わない
 		//ボタンの生成
@@ -954,7 +972,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				repaint();
 			}*/
 			
-			if(getWhichTurn()){
+			/*if(getWhichTurn()){
 				//String msg = "JUDGE"+ " " + winner;
 				String msg = "JUDGE";
 				//サーバに情報を送る
@@ -963,7 +981,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				repaint();
 			} else {
 				
-			}
+			}*/
 			
 		//}
 		return winner;
@@ -1055,6 +1073,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
         setVisible(true);
 	}
 	
+	//別ウィンドウのクラスに変数を投げる
 	public static int returnWinner(){
 		return winner;
 	}
@@ -1434,9 +1453,42 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("");
 				comrow2.setText("");
 			}
-			break;
+			//終了分岐
+			//break;
 			
-		case 21:
+		case 120:
+			//System.out.println("aaaaaaaaaaaaa => " + whichWin());
+			int win = whichWin();
+			if(win == 0) {
+				//負けの処理
+				if(getWolfOrRed()){
+				//オオカミ
+
+				} else {
+				//あかずきん
+
+				}
+			} else if(win == 1) {
+				//勝ちの処理
+				if(getWolfOrRed()){
+				//オオカミ
+
+				} else {
+				//あかずきん
+
+				}
+			} else {
+				//引き分けの処理
+				if(getWolfOrRed()){
+				//オオカミ
+
+				} else {
+				//あかずきん
+
+				}
+			}
+			
+		/*case 21:
 			strow1.setText("この悪いオオカミは");
 			strow2.setText("赤ずきんちゃんにとびかかり、");
 			strow3.setText("食べてしまいました。");
@@ -1466,6 +1518,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				
 			}
 			break;
+		*/
 			
 		}
 	}
@@ -1476,11 +1529,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 class WinDialogWindow extends JDialog implements ActionListener{
     WinDialogWindow(JFrame owner) {
         super(owner);//呼び出しもととの親子関係の設定．これをコメントアウトすると別々のダイアログになる
-
+		
+		
 		Container c = this.getContentPane();	//フレームのペインを取得する
         c.setLayout(null);		//自動レイアウトの設定を行わない
 		int winner = MyClient.returnWinner();
 		System.out.println("winnerの値は" + winner);
+		//暗転させる
+		MyClient.back90.setVisible(true);
 
         JButton theButton = new JButton();//画像を貼り付けるラベル
 		if(winner == 0){
@@ -1492,12 +1548,12 @@ class WinDialogWindow extends JDialog implements ActionListener{
 		}
         //ImageIcon theImage = new ImageIcon("win.jpg");//なにか画像ファイルをダウンロードしておく
         //theButton.setIcon(theImage);//ラベルを設定
-        theButton.setBounds(0,0,526,234);//ボタンの大きさと位置を設定する．(x座標，y座標,xの幅,yの幅）
+        theButton.setBounds(0,0,600,400);//ボタンの大きさと位置を設定する．(x座標，y座標,xの幅,yの幅）
         theButton.addActionListener(this);//ボタンをクリックしたときにactionPerformedで受け取るため
         c.add(theButton);//ダイアログに貼り付ける（貼り付けないと表示されない
 
         setTitle("");//タイトルの設定
-        setSize(526, 234);//大きさの設定
+        setSize(600, 400);//大きさの設定
         setResizable(false);//拡大縮小禁止//trueにすると拡大縮小できるようになる
         setUndecorated(true); //タイトルを表示しない
         setModal(true);//上を閉じるまで下を触れなくする（falseにすると触れる）
