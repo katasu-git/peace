@@ -42,7 +42,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	private String chara = "";
 	int guideCount = 0;
 	static int winner = 2; //0のとき負け
+	static String winnerStr = "wolf"; // or "red" or "draw"
 	SoundPlayer theSoundPlayer1;//どこからでもアクセスできるように，クラスのメンバとして宣言
+
 
 	//ポインターのアイコン
 	ImageIcon pointerIcon = new ImageIcon("icons/arrow.png");
@@ -55,7 +57,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 	ImageIcon myturnIcon = new ImageIcon("icons/yourturn.png");
 	ImageIcon rivalTurnIcon = new ImageIcon("icons/rivalturn.png");
 	JLabel imturnLabel = new JLabel(myturnIcon);
-	
+
 	//暗転用の画像
 	static ImageIcon back90Icon = new ImageIcon("icons/background90.png");
 	static JLabel back90 = new JLabel(back90Icon);
@@ -165,7 +167,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//あいてはあかずきん
 					redHoodLab.setBounds(30,410,125,125);
 					redminilab.setBounds(365,340,50,50);
-					
+
 					comrow1.setText("     " + "キミはオオカミ");
 
 				} else {
@@ -181,7 +183,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//あなたはオオカミ
 					wolfLab.setBounds(30,410,125,125);
 					wolfminiLab.setBounds(365,340,50,50);
-					
+
 					comrow1.setText("アナタはあかずきん");
 
 				}
@@ -306,7 +308,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 
 						} else if(cmd.equals("RESET")) {
 							//リセットボタンが押されたときの処理
-							
+
 							//ダイアログのテスト
 							//testDialog();
 						} else if(cmd.equals("JUDGE")){
@@ -321,7 +323,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							}
 							//強制終了の処理
 							System.exit(0);
-							
+
 						} else if(cmd.equals("GUIDE")){
 							int theGuide = Integer.parseInt(inputTokens[1]);//guideCount
 							guideCount = theGuide; //ガイドの数を両方に適応、共有する
@@ -337,10 +339,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 									out.flush();
 									repaint();
 								} else {
-								
+
 								}
 							}
-							
+
 						}
 					}else{
 						break;
@@ -372,7 +374,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			//System.out.println("tempx = " + tempx + "tempy = " + tempy);
 			if(judgeButton(tempy, tempx)){
 				//おける
-				
+
 				/*Icon whichTurn = imturnLabel.getIcon();
 				if(whichTurn.equals(myturnIcon)){
 					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
@@ -383,7 +385,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				} else {
 					System.out.println("相手のターンには置けません");
 				}*/
-				
+
 				if(getWhichTurn()){
 					String msg = "PLACE" + " " + theArrayIndex + " " + myColor + " " + theIcon;
 					//サーバに情報を送る
@@ -402,7 +404,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			repaint();//画面のオブジェクトを描画し直す
 
 		} else if(theIcon.equals(pactiveIcon)){ //passではなくpactiveに注意
-				
+
 				/*Icon whichTurn = imturnLabel.getIcon();
 				String msg = "PASS" + " " + myTurn + " " + myColor;
 				//サーバに情報を送る
@@ -413,7 +415,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				} else {
 					System.out.println("相手のターンにはパスできません");
 				}*/
-				
+
 				if(getWhichTurn()){
 					String msg = "PASS" + " " + myTurn + " " + myColor;
 					//サーバに情報を送る
@@ -424,14 +426,24 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 					//System.out.println("相手のターンにはパスできません");
 					playSound("sounds/cantPlace.wav");
 				}
-				
+
 
 		} else if(theIcon.equals(ractiveIcon)){
-				String msg = "RESET"+ " " + myColor;
+				/*String msg = "RESET"+ " " + myColor;
 				//サーバに情報を送る
 				out.println(msg);
 				out.flush();
-				repaint();
+				repaint();*/
+
+				if(getWhichTurn()){
+					String msg = "JUDGE";
+					//サーバに情報を送る
+					out.println(msg);
+					out.flush();
+					repaint();
+				} else {
+
+				}
 
 				/*
 				////////////////サウンドのテスト/////////////////////////////////////////
@@ -473,7 +485,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		/*theSoundPlayer1 = new SoundPlayer("sounds/kot.wav");
 		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
 		theSoundPlayer1.play();*/
-		
+
 		playSound("sounds/kot.wav");
 
 		///////////////////////////////////////////////////////////////////////
@@ -537,7 +549,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							int msgy = y + dy;
 							int msgx = x + dx;
 							int theArrayIndex = msgx*8 + msgy;
-							
+
 							/*Icon whichTurn = imturnLabel.getIcon();
 							//自分のターンのときだけフリップ送信
 							if(whichTurn.equals(myturnIcon)){
@@ -548,7 +560,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 							} else {
 								System.out.println("相手のターンには裏返せません");
 							}*/
-							
+
 							if(getWhichTurn()){
 								String msg = "FLIP"+" "+theArrayIndex+" "+myColor;
 								out.println(msg);
@@ -558,7 +570,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 								//System.out.println("相手のターンには裏返せません");
 								playSound("sounds/cantPlace.wav");
 							}
-							
+
 						}
 					} else { //ひとつも裏返せない
 						//System.out.println("ひとつも裏返せない"); //デバック
@@ -625,7 +637,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		resetIcon = new ImageIcon("icons/reset.png");
 		ractiveIcon= new ImageIcon("icons/reset-active.png");
 		guideIcon = new ImageIcon("icons/g-icon.png");
-		
+
 		//暗転用の画像
 		c.add(back90);
 		back90.setBounds(0,0,800,600);
@@ -752,7 +764,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 		ractiveButton.setVisible(false);
 		ractiveButton.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
 		//resetButton.setBorderPainted(false);
-		
+
 		//ダイアログのテスト
 		//ractiveButton.setActionCommand("PUSH_Dialog");//ボタンをクリックしたときにactionPerformedのtheCmdで受けとる文字列
         //ractiveButton.addActionListener(this);//ボタンをクリックしたときにactionPerformedで受け取るため
@@ -953,16 +965,31 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			if(countSub > 0){
 				//comrow1.setText("あなたの勝ち！");
 				winner = 1;
+				if(getWolfOrRed()){
+				//オオカミ
+				winnerStr = "wolf";
+				} else {
+				//あかずきん
+				winnerStr = "red";
+				}
 			} else if(countSub==0){
 				//comrow1.setText("引き分け！");
 				winner = 2;
+				winnerStr = "draw";
 			} else {
 				//comrow1.setText("あなたの負け！");
 				winner = 0;
+				if(getWolfOrRed()){
+				//オオカミ
+				winnerStr = "red";
+				} else {
+				//あかずきん
+				winnerStr = "wolf";
+				}
 			}
-			
+
 			//if文がないと2重に送信されます
-			
+
 			/*Icon whichTurn = imturnLabel.getIcon();
 			if(whichTurn.equals(myturnIcon)){
 				String msg = "JUDGE"+ " " + winner;
@@ -971,7 +998,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.flush();
 				repaint();
 			}*/
-			
+
 			/*if(getWhichTurn()){
 				//String msg = "JUDGE"+ " " + winner;
 				String msg = "JUDGE";
@@ -980,9 +1007,9 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.flush();
 				repaint();
 			} else {
-				
+
 			}*/
-			
+
 		//}
 		return winner;
 	}
@@ -1054,7 +1081,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			}
 
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
         System.out.println("アクション発生");
         System.out.println(e.getSource());
@@ -1067,17 +1094,17 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
             setVisible(true);
         }
     }
-	
+
 	public void testDialog(){
 		WinDialogWindow dlg = new WinDialogWindow(this);
         setVisible(true);
 	}
-	
+
 	//別ウィンドウのクラスに変数を投げる
 	public static int returnWinner(){
 		return winner;
 	}
-	
+
 	public boolean getWolfOrRed(){
 		if(myColor == 0){
 			//オオカミはtrue
@@ -1087,7 +1114,7 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			return false;
 		}
 	}
-	
+
 	//現在自分のターンならtureを返す関数
 	public boolean getWhichTurn(){
 		Icon whichTurn = imturnLabel.getIcon();
@@ -1097,26 +1124,26 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 			return false;
 		}
 	}
-	
+
 	//ファイルパスを引数にする
 	public void playSound(String file){
 		theSoundPlayer1 = new SoundPlayer(file);
 		theSoundPlayer1.SetLoop(false);//ＢＧＭとして再生を繰り返す
 		theSoundPlayer1.play();
 	}
-	
+
 	//ストーリーを進める場所です
 	public void tellStory(int tCon){
 
 		switch(tCon){
 		case 1:
-		
+
 			//共通部分
 			strow1.setText("むかし、それまでに"); //初期設定では一行で20文字です
 			strow2.setText("誰も見たことがない");
 			strow3.setText("ほどきれいな");
 			strow4.setText("女の子がいました。");
-			
+
 			//それぞれのコメント
 			if(getWolfOrRed()){
 				//オオカミ
@@ -1127,14 +1154,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("ワタシ美人なの");
 				comrow2.setText("");
 			}
-			
+
 			break;
 		case 2:
 			strow1.setText("この子に夢中なおばあさんが");
 			strow2.setText("赤いずきんを作らせましたが");
 			strow3.setText("それがよく似合ったので");
 			strow4.setText("「赤ずきん」と呼ばれました。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("ハラがへった");
@@ -1144,14 +1171,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("ホントの");
 				comrow2.setText("なまえはヒミツ");
 			}
-			
+
 			break;
 		case 3:
 			strow1.setText("ある日、母が女の子にいいました。");
 			strow2.setText("「おばあさんが病気だそうだから");
 			strow3.setText("どんな具合か見ておいで。");
 			strow4.setText("ガレットとバターをもってね」");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("さっさと");
@@ -1161,14 +1188,14 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("はじめての");
 				comrow2.setText("おつかいよね");
 			}
-			
+
 			break;
 		case 4:
 			strow1.setText("赤ずきんちゃんは別の村に住む");
 			strow2.setText("おばあさんの所へ向かって");
 			strow3.setText("すぐに出かけました。");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("いよいよだな");
@@ -1178,16 +1205,16 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("いってきまーす");
 				comrow2.setText("");
 			}
-			
+
 			break;
-			
+
 		//ここから分岐
 		case 5:
 			strow1.setText("赤ずきんちゃんが森に入ると");
 			strow2.setText("オオカミが出てきます");
 			strow3.setText("オオカミはこの子を");
 			strow4.setText("食べたくなりました");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("うまそうな");
@@ -1197,15 +1224,15 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("ちょっとクサイ");
 				comrow2.setText("");
 			}
-			
+
 			break;
-			
+
 		case 6:
 			strow1.setText("どこへ行くのか");
 			strow2.setText("家はどこかなどときかれて");
 			strow3.setText("赤ずきんは");
 			strow4.setText("ありのままを答えます");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("まぁ興味ないが");
@@ -1216,13 +1243,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("あ、オオカミか");
 			}
 			break;
-			
+
 		case 7:
 			strow1.setText("オオカミは言いました");
 			strow2.setText("「オレもばあさんに会いたい。");
 			strow3.setText("どっちが先に着くか");
 			strow4.setText("競争しよう。」");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("先にばあさんを");
@@ -1233,13 +1260,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("足は速いの");
 			}
 			break;
-		
+
 		case 8:
 			strow1.setText("オオカミは近道を");
 			strow2.setText("走っていきましたが");
 			strow3.setText("赤ずきんちゃんは");
 			strow4.setText("遊びながら行きました");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("血のあじがする");
@@ -1250,13 +1277,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("キレイな蝶が");
 			}
 			break;
-		
+
 		case 9:
 			strow1.setText("オオカミはおばあさんの");
 			strow2.setText("家について、");
 			strow3.setText("「孫の赤ずきんよ」と");
 			strow4.setText("作り声でいいました。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("ノドがイタイぜ");
@@ -1267,13 +1294,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("きれいなお花が");
 			}
 			break;
-			
+
 		case 10:
 			strow1.setText("オオカミは家に入り");
 			strow2.setText("おばあさんにとびかかると");
 			strow3.setText("すぐ食べてしまいました");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("なつかしい");
@@ -1284,13 +1311,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("行こうかしら");
 			}
 			break;
-			
+
 		case 11:
 			strow1.setText("しばらくすると");
 			strow2.setText("赤ずきんちゃんが来て、");
 			strow3.setText("戸をたたきます。");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("何してたんだ");
@@ -1301,13 +1328,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("ついたわ");
 			}
 			break;
-			
+
 		case 12:
 			strow1.setText("「どなたかね？」");
 			strow2.setText("という太い声がします。");
 			strow3.setText("おばあさんは風邪を");
 			strow4.setText("引いているのでしょうか。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("さあ");
@@ -1318,13 +1345,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("だったかしら");
 			}
 			break;
-			
+
 		case 13:
 			strow1.setText("「赤ずきんよ。");
 			strow2.setText("ガレットとバターの壺を");
 			strow3.setText("もってきたの」");
 			strow4.setText("そう言って中に入りました。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("食べるのは");
@@ -1335,13 +1362,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("大丈夫かな");
 			}
 			break;
-			
+
 		case 14:
 			strow1.setText("狼はベッドの下に");
 			strow2.setText("かくれたまま、");
 			strow3.setText("こっちへ来ておばあちゃん");
 			strow4.setText("とお休み」と言いました。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1352,13 +1379,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-		
+
 		case 15:
 			strow1.setText("赤ずきんは服を脱ぎ");
 			strow2.setText("ベッドの下に入ろうとしますが");
 			strow3.setText("おばあさんの姿を見て");
 			strow4.setText("とても驚きます。");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1369,13 +1396,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-			
+
 		case 16:
 			strow1.setText("「おばあちゃん、なんて大きな");
 			strow2.setText("腕をしてるの？」");
 			strow3.setText("「おまえを上手に");
 			strow4.setText("抱けるようにだよ」");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1386,13 +1413,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-			
+
 		case 17:
 			strow1.setText("「おばあちゃん、なんて大きな");
 			strow2.setText("脚をしてるの？」");
 			strow3.setText("「速く走れるようにだよ」");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1403,13 +1430,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-			
+
 		case 18:
 			strow1.setText("「おばあちゃん、なんて大きな");
 			strow2.setText("耳をしてるの？」");
 			strow3.setText("「よく聞こえるようにだよ」");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1420,13 +1447,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-			
+
 		case 19:
 			strow1.setText("「おばあちゃん、なんて大きな");
 			strow2.setText("目をしてるの？」");
 			strow3.setText("「よく見えるようにだよ」");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1437,13 +1464,13 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow2.setText("");
 			}
 			break;
-			
+
 		case 20:
 			strow1.setText("「おばあちゃん、なんて大きな");
 			strow2.setText("歯をしてるの？」");
 			strow3.setText("「おまえを食べるためさ」");
 			strow4.setText("");
-			
+
 			if(getWolfOrRed()){
 				//オオカミ
 				comrow1.setText("");
@@ -1453,59 +1480,10 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				comrow1.setText("");
 				comrow2.setText("");
 			}
-			//終了分岐
-			//break;
-			
-		case 120:
-			//System.out.println("aaaaaaaaaaaaa => " + whichWin());
-			int win = whichWin();
-			if(win == 0) {
-				//負けの処理
-				if(getWolfOrRed()){
-				//オオカミ
 
-				} else {
-				//あかずきん
-
-				}
-			} else if(win == 1) {
-				//勝ちの処理
-				if(getWolfOrRed()){
-				//オオカミ
-
-				} else {
-				//あかずきん
-
-				}
-			} else {
-				//引き分けの処理
-				if(getWolfOrRed()){
-				//オオカミ
-
-				} else {
-				//あかずきん
-
-				}
-			}
-			
-		/*case 21:
-			strow1.setText("この悪いオオカミは");
-			strow2.setText("赤ずきんちゃんにとびかかり、");
-			strow3.setText("食べてしまいました。");
-			strow4.setText("");
-			
-			if(getWolfOrRed()){
-				//オオカミ
-				comrow1.setText("");
-				comrow2.setText("");
-			} else {
-				//あかずきん
-				comrow1.setText("");
-				comrow2.setText("");
-			}
 			//最後のところは抜けて終了処理へ
-			//break;
-			
+			//break;*/
+
 		case 100:
 			//終了処理
 			if(getWhichTurn()){
@@ -1514,59 +1492,110 @@ public class MyClient extends JFrame implements MouseListener,MouseMotionListene
 				out.println(msg);
 				out.flush();
 				repaint();
-			} else {
-				
 			}
 			break;
-		*/
-			
+
+
 		}
 	}
 
 }
 
 //ダイアログ用のクラス
-class WinDialogWindow extends JDialog implements ActionListener{
-    WinDialogWindow(JFrame owner) {
-        super(owner);//呼び出しもととの親子関係の設定．これをコメントアウトすると別々のダイアログになる
-		
-		
-		Container c = this.getContentPane();	//フレームのペインを取得する
-        c.setLayout(null);		//自動レイアウトの設定を行わない
-		int winner = MyClient.returnWinner();
-		System.out.println("winnerの値は" + winner);
-		//暗転させる
-		MyClient.back90.setVisible(true);
+class WinDialogWindow extends JDialog implements MouseListener,ActionListener{
+	ImageIcon endbtnIcon = new ImageIcon("icons/endbtn.png");
+	ImageIcon endactIcon = new ImageIcon("icons/eactive.png");
+	JButton endbtn = new JButton(endbtnIcon);
+	JButton eactivebtn = new JButton(endactIcon);
 
-        JButton theButton = new JButton();//画像を貼り付けるラベル
-		if(winner == 0){
-			theButton.setText("あなたのまけ！");
-		} else if (winner == 1){
-			theButton.setText("あなたのかち！");
-		} else {
-			theButton.setText("ひきわけ！");
+		WinDialogWindow(JFrame owner) {
+			super(owner);
+			Container c = this.getContentPane();
+			c.setLayout(null);
+			int winner = MyClient.returnWinner();
+			//System.out.println("winnerの値は" + winner);
+			//暗転させる
+			MyClient.back90.setVisible(true);
+			//JButton theButton = new JButton();
+			//エンディング処理に必要な画像
+
+			ImageIcon wolf_win = new ImageIcon("icons/wolf_win.png");
+			ImageIcon red_win = new ImageIcon("icons/red_win.png");
+			JLabel main_image = new JLabel();
+
+			//終了
+			//endbtn.addActionListener(this);
+			c.add(endbtn);
+			endbtn.setBounds(490,290,100,100);
+			endbtn.setOpaque(true);
+			endbtn.addMouseListener(this);
+			endbtn.setContentAreaFilled(false);
+			endbtn.setVisible(true);
+			endbtn.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
+
+			eactivebtn.addActionListener(this);
+			c.add(eactivebtn);
+			eactivebtn.setBounds(490,290,100,100);
+			eactivebtn.setOpaque(true);
+			eactivebtn.addMouseListener(this);
+			eactivebtn.setContentAreaFilled(false);
+			eactivebtn.setVisible(false);
+			eactivebtn.setBorder(new LineBorder(new Color(102,102,102,255), 1, true)); //枠の色設定
+
+			System.out.println(MyClient.winnerStr); //デバック
+
+			if(MyClient.winnerStr.equals("wolf")){
+				main_image.setIcon(wolf_win);
+			} else if(MyClient.winnerStr.equals("red")) {
+				main_image.setIcon(red_win);
+			} else {
+
+			}
+
+			c.add(main_image);
+			main_image.setBounds(0,0,600,400);
+
+			setTitle("");
+			setSize(600, 400);
+			setResizable(false);
+			setUndecorated(true);
+			setModal(true);//上を閉じるまで下を触れなくする（falseにすると触れる）
+
+			//ダイアログの大きさや表示場所を変更できる
+			//親のダイアログの中心に表示したい場合は，親のウィンドウの中心座標を求めて，子のダイアログの大きさの半分ずらす
+			setLocation(owner.getBounds().x+owner.getWidth()/2-this.getWidth()/2,owner.getBounds().y+owner.getHeight()/2-this.getHeight()/2);
+			setVisible(true);
 		}
-        //ImageIcon theImage = new ImageIcon("win.jpg");//なにか画像ファイルをダウンロードしておく
-        //theButton.setIcon(theImage);//ラベルを設定
-        theButton.setBounds(0,0,600,400);//ボタンの大きさと位置を設定する．(x座標，y座標,xの幅,yの幅）
-        theButton.addActionListener(this);//ボタンをクリックしたときにactionPerformedで受け取るため
-        c.add(theButton);//ダイアログに貼り付ける（貼り付けないと表示されない
 
-        setTitle("");//タイトルの設定
-        setSize(600, 400);//大きさの設定
-        setResizable(false);//拡大縮小禁止//trueにすると拡大縮小できるようになる
-        setUndecorated(true); //タイトルを表示しない
-        setModal(true);//上を閉じるまで下を触れなくする（falseにすると触れる）
-
-        //ダイアログの大きさや表示場所を変更できる
-        //親のダイアログの中心に表示したい場合は，親のウィンドウの中心座標を求めて，子のダイアログの大きさの半分ずらす
-        setLocation(owner.getBounds().x+owner.getWidth()/2-this.getWidth()/2,owner.getBounds().y+owner.getHeight()/2-this.getHeight()/2);
-        setVisible(true);
-    }
-	
-	//ボタンが押されたときの処理
+		//ボタンが押されたときの処理
     public void actionPerformed(ActionEvent e) {
-        this.dispose();//Dialogを廃棄する
-    }
-}
+			this.dispose();//Dialogを廃棄する
+		}
 
+		public void mouseEntered(MouseEvent e) {
+			//System.out.println("マウスが入った");
+			JButton theButton = (JButton)e.getComponent();
+			Icon theIcon = theButton.getIcon();
+			if(theIcon.equals(endbtnIcon)){
+				endbtn.setVisible(false);
+				eactivebtn.setVisible(true);
+			}
+		}
+
+		public void mouseExited(MouseEvent e) {
+			//System.out.println("マウス脱出");
+			JButton theButton = (JButton)e.getComponent();
+			Icon theIcon = theButton.getIcon();
+			if(theIcon.equals(endactIcon)){
+				endbtn.setVisible(true);
+				eactivebtn.setVisible(false);
+			}
+		}
+
+		public void mouseClicked(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e){}
+		public void mouseDragged(MouseEvent e) {}
+		public void mouseMoved(MouseEvent e) {}
+
+}
